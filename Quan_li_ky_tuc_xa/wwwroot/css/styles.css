@@ -1,0 +1,90 @@
+﻿.header-brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* trái: logo+text, phải: tiêu đề lớn */
+    background-color: #133458; /* nền xanh đậm như ảnh */
+    color: #fff;
+    padding: 14px 28px;
+    box-sizing: border-box;
+    gap: 20px;
+}
+
+/* Khối logo + tên trường (bên trái) */
+.brand-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+/* Ảnh logo tròn */
+.brand-logo {
+    width: 72px; /* điều chỉnh kích thước */
+    height: 72px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid rgba(255,255,255,0.15); /* viền nhẹ nếu muốn */
+    background-color: #fff; /* fallback nếu ảnh có nền trong suốt */
+}
+
+/* Tên trường (Việt / Anh) */
+.brand-names {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+}
+
+.school-vi {
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.2px;
+}
+
+.school-en {
+    font-size: 12px;
+    font-weight: 600;
+    opacity: 0.9;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Tiêu đề chính (bên phải) */
+.brand-title {
+    font-size: 28px; /* lớn như ảnh */
+    font-weight: 800;
+    letter-spacing: 3px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+/* Responsive: nhỏ màn hình -> xếp dọc, căn giữa */
+@media (max-width: 900px) {
+    .header-brand {
+        flex-direction: column;
+        align-items: stretch;
+        text-align: center;
+        gap: 10px;
+        padding: 12px;
+    }
+
+    .brand-left {
+        justify-content: center;
+    }
+
+    .brand-names {
+        align-items: center;
+    }
+
+    .brand-title {
+        font-size: 20px;
+        white-space: normal;
+        text-align: center;
+    }
+}
+
+.templatemo-footer {
+    background-color: #fff !important; /* nền trắng */
+    border: none;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    color: black;
+}

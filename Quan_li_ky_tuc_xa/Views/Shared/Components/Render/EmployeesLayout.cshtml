@@ -1,0 +1,52 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Home Page - DashboardAdminMVC</title>
+
+    <!-- Styles (place your CSS files into wwwroot/css/) -->
+    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/templatemo_main.css">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+</head>
+<body style="">
+    <partial name="_Top" />
+
+    <div class="template-page-wrapper">
+        <div class="navbar-collapse collapse templatemo-sidebar">
+            <ul class="templatemo-sidebar-menu">
+                <li><a href="/"><i class="fa fa-home"></i>Trang chủ</a></li>
+                <li><a href="/Data/Visualization"><i class="fa fa-cubes"></i>Báo cáo dữ liệu</a></li>
+                <li><a href="/Map"><i class="fa fa-map-marker"></i>Sơ đồ phòng</a></li>
+                <li><a href="/User/Tables"><i class="fa fa-users"></i>Quản lý sinh viên</a></li>
+                <li><a href="/Account/Preferences"><i class="fa fa-cog"></i>Quản lý cơ sở vật chất</a></li>
+                <li><a href="/Account/Login"><i class="fa fa-sign-out"></i>Đăng nhập</a></li>
+            </ul>
+        </div>
+        <div class="templatemo-content-wrapper">
+            <main>
+                @RenderBody()
+            </main>
+            <partial name="_Footer" />
+        </div>
+
+        <!-- Scripts (place your JS files into wwwroot/js/) -->
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/templatemo_script.js"></script>
+
+        <!-- Visual Studio Browser Link -->
+        <script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestid="3a545e79a9c840ea9152be30635ecea7" data-requestmappingfromserver="false" data-connecturl="http://localhost:63029/39e6319a066e4d61b599c7e292c9f9a1/browserLink"></script>
+        <!-- End Browser Link -->
+
+
+    </div>
+</body>
+</html>

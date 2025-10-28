@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "Preferences";
+    Layout = null;
+}
+@model Quan_li_ky_tuc_xa.Models.Entities.User;
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DANGKY</title>
+    <link rel="stylesheet" href="~/css/long.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="form-container">
+            <h2>Đăng ky</h2>
+       
+            <form asp-controller="Acc" asp-action="Register" method="post" class="mt-3 enctype=">
+                <div style="margin-top:7px" class="form-group row">
+                    <label asp-for="Username" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Username" class="form-control" placeholder="Username" />
+                        <span asp-validation-for="Username" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div style="margin-top:7px" class="form-group row">
+                    <label asp-for="Password" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Password" class="form-control" placeholder="Password" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                    </div>
+                </div>
+
+                @* <div style="margin-top:7px" class="form-group row">
+                    <label asp-for="Loai" class="col-sm-2 col-form-label"></label>
+                    <div class="col-sm-10">
+                        <input asp-for="Loai" class="form-control" placeholder="Loai" />
+                        <span asp-validation-for="Loai" class="text-danger"></span>
+                    </div>
+                </div> *@
+
+                <div style="margin-top:10px" class="form-group row">
+                    <div class="col-sm-10">
+                        <button type="submit" class="btn btn-primary">Đăng KY</button>
+                    </div>
+                </div>
+            </form>
+            <div class="form-links">
+                <p>
+                    <a asp-action="Register" class="btn btn-primary px-3">Dang nhaap</a>
+                </p>
+                <p><a href="index.html">Về trang chủ</a></p>
+            </div>
+            @if (ViewBag.Error != null)
+            {
+                <div class="text-danger mt-2">@ViewBag.Error</div>
+            }
+        </div>
+    </div>
+    <script src="auth.js"></script>
+</body>
+
+@if (TempData["Success"] != null)
+{
+    <div class="text-success mt-2">@TempData["Success"]</div>
+}
