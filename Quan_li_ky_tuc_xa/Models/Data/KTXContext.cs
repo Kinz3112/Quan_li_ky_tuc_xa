@@ -92,11 +92,6 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                       .WithOne(d => d.Hop_Dong)
                       .HasForeignKey<Hop_dong>(h => h.MaDichVu)
                       .OnDelete(DeleteBehavior.Restrict);
-
-                entity.HasOne(h => h.Phong)
-                      .WithMany(p => p.Hop_Dongs)
-                      .HasForeignKey(h => h.MaPhong)
-                      .OnDelete(DeleteBehavior.Restrict);
             });
 
             // --------------------- HÓA ĐƠN ---------------------

@@ -4,7 +4,6 @@
     {
         public Phong() { 
             Sinh_Viens = new HashSet<Sinh_Vien>();
-            Hop_Dongs = new HashSet<Hop_dong>();
         }
         public string MaPhong { get; set; }
         public string Ten { get; set; }
@@ -15,6 +14,5 @@
         public virtual Sinh_Vien Truong_phong { get; set; }
         public virtual Toa Toa { get; set; }
         public virtual ICollection<Sinh_Vien> Sinh_Viens { get; set; }
-        public virtual ICollection<Hop_dong> Hop_Dongs { get; set; }
     }
 }

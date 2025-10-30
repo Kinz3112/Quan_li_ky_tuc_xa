@@ -12,10 +12,8 @@
         public DateTime NgayKetThuc {  get; set; }
         public string LoaiHopDong { get; set; }
         public string MaDichVu {  get; set; }
-        public string MaPhong {  get; set; }
         public virtual Nhan_vien Nhan_Vien { get; set; }
         public virtual Sinh_Vien Sinh_Vien { get;set; }
-        public virtual Phong Phong {  get; set; }
         public virtual Dich_vu Dich_Vu { get; set; }
         public virtual Hoa_don Hoa_Don { get; set; }
     }

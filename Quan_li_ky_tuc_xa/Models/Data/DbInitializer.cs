@@ -15,8 +15,6 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     return;
                 }
 
-               
-
                 var nhanViens = new Nhan_vien[]
                 {
                     new Nhan_vien
@@ -226,8 +224,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-01-01"),
                     NgayKetThuc = DateTime.Parse("2025-12-31"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004",
-                    MaPhong = "P101"
+                    MaDichVu = "DV004"
                 },
                 new Hop_dong
                 {
@@ -238,8 +235,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-03-01"),
                     NgayKetThuc = DateTime.Parse("2026-02-28"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004",
-                    MaPhong = "P201"
+                    MaDichVu = "DV004"
                 },
                 new Hop_dong
                 {
@@ -250,8 +246,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-06-01"),
                     NgayKetThuc = DateTime.Parse("2026-05-31"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004",
-                    MaPhong = "P301"
+                    MaDichVu = "DV004"
                 }
             };
                 foreach (var hd in hopDongs)
