@@ -1,0 +1,46 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Phong
+
+@{
+    ViewBag.Title = "Chỉnh sửa phòng";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+
+<div class="templatemo-content">
+<h2>Chỉnh sửa phòng</h2>
+
+    <form asp-action="Edit_Phong" asp-controller="Employees" asp-area="" method="post">
+        @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label asp-for="MaPhong"></label>
+        <input asp-for="MaPhong" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Ten"></label>
+        <input asp-for="Ten" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MaToa">Tòa</label>
+        <input asp-for="MaToa"class="form-control" readonly/t>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="LoaiPhong"></label>
+        <input asp-for="LoaiPhong" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="SoNguoi"></label>
+        <input asp-for="SoNguoi" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="MaTruongPhong">Trưởng phòng</label>
+        <select asp-for="MaTruongPhong" asp-items="@(new SelectList(ViewBag.MaTruongPhong, "Value", "Text"))" class="form-control"></select>
+    </div>
+
+    <button type="submit" class="btn btn-primary mt-3">Lưu</button>
+    <a asp-action="RManager" class="btn btn-secondary mt-3">Quay lại</a>
+</form>
+</div>

@@ -180,38 +180,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                 }
                 context.SaveChanges();
 
-                var dichVus = new Dich_vu[]
-                {
-                    new Dich_vu
-                    {
-                        MaDichVu = "DV001",
-                        TenDichVu = "Điện nước",
-                        NhaCungCap = "Công ty Điện lực TP.HCM"
-                    },
-                    new Dich_vu
-                    {
-                        MaDichVu = "DV002",
-                        TenDichVu = "Internet",
-                        NhaCungCap = "VNPT"
-                    },
-                    new Dich_vu
-                    {
-                        MaDichVu = "DV003",
-                        TenDichVu = "Giặt ủi",
-                        NhaCungCap = "Dịch vụ Giặt Ủi Sinh Viên"
-                    },
-                    new Dich_vu
-                    {
-                        MaDichVu = "DV004",
-                        TenDichVu = "Thuê phòng",
-                        NhaCungCap = "Ban quản lí ký túc xá"
-                    }
-                };
-                foreach (var dv in dichVus)
-                {
-                    context.Dich_Vus.Add(dv);
-                }
-                context.SaveChanges();
+               
 
                 var hopDongs = new Hop_dong[]
             {
@@ -224,7 +193,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-01-01"),
                     NgayKetThuc = DateTime.Parse("2025-12-31"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004"
+                    MaPhong = "P101"
                 },
                 new Hop_dong
                 {
@@ -235,7 +204,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-03-01"),
                     NgayKetThuc = DateTime.Parse("2026-02-28"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004"
+                    MaPhong = "P101"
                 },
                 new Hop_dong
                 {
@@ -246,7 +215,7 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                     NgayBatDau = DateTime.Parse("2025-06-01"),
                     NgayKetThuc = DateTime.Parse("2026-05-31"),
                     LoaiHopDong = "Thuê phòng",
-                    MaDichVu = "DV004"
+                    MaPhong = "P101"
                 }
             };
                 foreach (var hd in hopDongs)

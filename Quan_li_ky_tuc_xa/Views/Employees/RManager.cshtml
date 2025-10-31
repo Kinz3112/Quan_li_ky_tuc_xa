@@ -1,0 +1,128 @@
+﻿@model IEnumerable<Quan_li_ky_tuc_xa.Models.Entities.Phong>
+
+@{
+    ViewBag.Title = "Danh sách Phòng";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+
+<div class="templatemo-content">
+    <h2>Danh sách phòng</h2>
+
+    <!-- 🔹 Bộ lọc -->
+    <div class="row mb-3">
+        <div class="col-md-4">
+            <select id="soNguoiSelect" class="form-control">
+                <option value="">-- Tất cả số người --</option>
+                <option value="1">1 người</option>
+                <option value="2">2 người</option>
+                <option value="3">3 người</option>
+                <option value="4">4 người</option>
+            </select>
+        </div>
+    </div>
+
+    <!-- 🔹 Bảng hiển thị -->
+    <table class="table table-bordered table-striped" id="phongTable">
+        <thead>
+            <tr>
+                <th>Mã phòng</th>
+                <th>Tên</th>
+                <th>Tòa</th>
+                <th>Loại phòng</th>
+                <th>Số người hiện tại</th>
+                <th>Trưởng phòng</th>
+                <th>Cập nhật</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var e in Model)
+            {
+                <tr>
+                    <td>@e.MaPhong</td>
+                    <td>@e.Ten</td>
+                    <td>@e.Toa.Ten</td>
+                    <td>@e.LoaiPhong</td>
+                    <td>@e.SoNguoi / 4</td>
+                    <td>@(e.Truong_phong?.HovaTen ?? "Không có")</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="Edit_Phong" asp-route-id="@e.MaPhong">
+                            ✏️ Chỉnh sửa
+                        </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <!-- 🔹 Phân trang -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center" id="pagination">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                    <button class="page-link page-btn" data-page="@i">@i</button>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        // 🔹 Hàm load dữ liệu AJAX
+        function loadPhong(page) {
+            var soNguoi = $('#soNguoiSelect').val();
+
+            $.ajax({
+                url: '@Url.Action("RManager", "Employees")',
+                data: { soNguoi: soNguoi, page: page },
+                success: function (res) {
+                    // Cập nhật bảng
+                    var tbody = $('#phongTable tbody');
+                    tbody.empty();
+
+                    $.each(res.data, function (i, e) {
+                        tbody.append(`
+                            <tr>
+                                <td>${e.maPhong}</td>
+                                <td>${e.ten}</td>
+                                <td>${e.toa}</td>
+                                <td>${e.loaiPhong}</td>
+                                <td>${e.soNguoi}/4</td>
+                                <td>${e.truongPhong}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="/Employees/Edit_Phong/${e.maPhong}">
+                                        ✏️ Chỉnh sửa
+                                    </a>
+                                </td>
+                            </tr>
+                        `);
+                    });
+
+                    // Cập nhật phân trang
+                    var pagination = $('#pagination');
+                    pagination.empty();
+                    for (let i = 1; i <= res.totalPages; i++) {
+                        pagination.append(`
+                            <li class="page-item ${i === res.currentPage ? "active" : ""}">
+                                <button class="page-link page-btn" data-page="${i}">${i}</button>
+                            </li>
+                        `);
+                    }
+                }
+            });
+        }
+
+        // 🔹 Khi chọn số người
+        $('#soNguoiSelect').on('change', function () {
+            loadPhong(1);
+        });
+
+        // 🔹 Khi bấm nút trang
+        $(document).on('click', '.page-btn', function () {
+            var page = $(this).data('page');
+            loadPhong(page);
+        });
+    </script>
+}

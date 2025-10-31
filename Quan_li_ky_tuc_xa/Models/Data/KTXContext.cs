@@ -12,7 +12,6 @@ namespace Quan_li_ky_tuc_xa.Models.Data
         public DbSet<Hop_dong> Hop_Dongs { get; set; }
         public DbSet<Toa> Toas { get; set; }
         public DbSet<Phong> Phongs { get; set; }
-        public DbSet<Dich_vu> Dich_Vus { get; set; }
         public DbSet<User> Users { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -25,12 +24,22 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                       .WithMany(p => p.Sinh_Viens)
                       .HasForeignKey(e => e.MaPhong)
                       .OnDelete(DeleteBehavior.Restrict);
-                        });
+
+                entity.HasOne(hd => hd.User)
+                      .WithOne(h => h.Sinh_Vien)
+                      .HasForeignKey<Sinh_Vien>(hd => hd.Username)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
             
             modelBuilder.Entity<Nhan_vien>(entity =>
             {
                 entity.ToTable("NhanVien");
                 entity.HasKey(e => e.MaNhanVien);
+
+                entity.HasOne(hd => hd.User)
+                      .WithOne(h => h.Nhan_Vien)
+                      .HasForeignKey<Nhan_vien>(hd => hd.Username)
+                      .OnDelete(DeleteBehavior.Restrict);
 
             });
 
@@ -65,13 +74,8 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
-            // --------------------- DỊCH VỤ ---------------------
-            modelBuilder.Entity<Dich_vu>(entity =>
-            {
-                entity.ToTable("DichVu");
-                entity.HasKey(e => e.MaDichVu);
-            });
-
+           
+            
             // --------------------- HỢP ĐỒNG ---------------------
             modelBuilder.Entity<Hop_dong>(entity =>
             {
@@ -88,9 +92,9 @@ namespace Quan_li_ky_tuc_xa.Models.Data
                       .HasForeignKey(h => h.MaSinhVien)
                       .OnDelete(DeleteBehavior.Restrict);
 
-                entity.HasOne(h => h.Dich_Vu)
-                      .WithOne(d => d.Hop_Dong)
-                      .HasForeignKey<Hop_dong>(h => h.MaDichVu)
+                entity.HasOne(h => h.Phong)
+                      .WithMany(p => p.Hop_Dongs)
+                      .HasForeignKey(h => h.MaPhong)
                       .OnDelete(DeleteBehavior.Restrict);
             });
 
