@@ -1,0 +1,54 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Hop_dong
+
+@{
+    ViewBag.Title = "Chỉnh sửa hợp đồng";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2>Chỉnh sửa hợp đồng</h2>
+
+<form asp-action="Edit_Contract" method="post">
+    <div class="form-group">
+        <label>Mã hợp đồng</label>
+        <input asp-for="MaHopDong" class="form-control" readonly />
+    </div>
+
+    <div class="form-group">
+        <label>Tên hợp đồng</label>
+        <input asp-for="TenHopDong" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Loại hợp đồng</label>
+        <input asp-for="LoaiHopDong" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Ngày bắt đầu</label>
+        <input asp-for="NgayBatDau" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Ngày kết thúc</label>
+        <input asp-for="NgayKetThuc" type="date" class="form-control" />
+    </div>
+
+    <div class="form-group">
+        <label>Sinh viên</label>
+        <select asp-for="MaSinhVien" asp-items="ViewBag.MaSinhVien" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Nhân viên quản lý</label>
+        <select asp-for="MaNhanVienQuanLi" asp-items="ViewBag.MaNhanVien" class="form-control"></select>
+    </div>
+
+    <div class="form-group">
+        <label>Phòng</label>
+        <select asp-for="MaPhong" asp-items="ViewBag.MaPhong" class="form-control"></select>
+    </div>
+
+    <button type="submit" class="btn btn-success">💾 Lưu thay đổi</button>
+    <a asp-action="ContractManager" class="btn btn-secondary">⬅️ Quay lại</a>
+</form>
+</div>

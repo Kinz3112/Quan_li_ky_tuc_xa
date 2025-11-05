@@ -6,31 +6,21 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Quan_li_ky_tuc_xa.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class TenMigrationMoi : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "DichVu",
-                columns: table => new
-                {
-                    MaDichVu = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TenDichVu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NhaCungCap = table.Column<string>(type: "nvarchar(max)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_DichVu", x => x.MaDichVu);
-                });
-
             migrationBuilder.CreateTable(
                 name: "User",
                 columns: table => new
                 {
                     Username = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Loai = table.Column<int>(type: "int", nullable: false)
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    isActive = table.Column<bool>(type: "bit", nullable: false),
+                    Created_At = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Last_At = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -38,39 +28,45 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "BanQuanLi",
-                columns: table => new
-                {
-                    MaQL = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    DiaChi = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaGiamDoc = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_BanQuanLi", x => x.MaQL);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "NhanVien",
                 columns: table => new
                 {
                     MaNhanVien = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ChucVu = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GioiTinh = table.Column<bool>(type: "bit", nullable: false),
-                    NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MaQL = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_NhanVien", x => x.MaNhanVien);
                     table.ForeignKey(
-                        name: "FK_NhanVien_BanQuanLi_MaQL",
-                        column: x => x.MaQL,
-                        principalTable: "BanQuanLi",
-                        principalColumn: "MaQL",
+                        name: "FK_NhanVien_User_Username",
+                        column: x => x.Username,
+                        principalTable: "User",
+                        principalColumn: "Username",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Role",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    RoleName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Role", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Role_User_Username",
+                        column: x => x.Username,
+                        principalTable: "User",
+                        principalColumn: "Username",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -79,8 +75,8 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 columns: table => new
                 {
                     MaToa = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaNhanVienQuanLi = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    Ten = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaNhanVienQuanLi = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -102,7 +98,7 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     NgayLap = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NgayThanhToan = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TrangThai = table.Column<bool>(type: "bit", nullable: false),
-                    MaHopDong = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    MaHopDong = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -114,24 +110,17 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 columns: table => new
                 {
                     MaHopDong = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MaNhanVienQuanLi = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MaSinhVien = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TenHopDong = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MaNhanVienQuanLi = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    MaSinhVien = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    TenHopDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     NgayBatDau = table.Column<DateTime>(type: "datetime2", nullable: false),
                     NgayKetThuc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LoaiHopDong = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    MaDichVu = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    MaPhong = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    LoaiHopDong = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    MaPhong = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_HopDong", x => x.MaHopDong);
-                    table.ForeignKey(
-                        name: "FK_HopDong_DichVu_MaDichVu",
-                        column: x => x.MaDichVu,
-                        principalTable: "DichVu",
-                        principalColumn: "MaDichVu",
-                        onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
                         name: "FK_HopDong_NhanVien_MaNhanVienQuanLi",
                         column: x => x.MaNhanVienQuanLi,
@@ -167,13 +156,14 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 columns: table => new
                 {
                     MaSinhVien = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    HovaTen = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Lop = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Khoa = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    HovaTen = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Lop = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Khoa = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Sdt = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     GioiTinh = table.Column<bool>(type: "bit", nullable: false),
                     NgaySinh = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    MaPhong = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    MaPhong = table.Column<string>(type: "nvarchar(450)", nullable: true),
+                    Username = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -184,25 +174,20 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         principalTable: "Phong",
                         principalColumn: "MaPhong",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_SinhVien_User_Username",
+                        column: x => x.Username,
+                        principalTable: "User",
+                        principalColumn: "Username",
+                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_BanQuanLi_MaGiamDoc",
-                table: "BanQuanLi",
-                column: "MaGiamDoc",
-                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_HoaDon_MaHopDong",
                 table: "HoaDon",
                 column: "MaHopDong",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_HopDong_MaDichVu",
-                table: "HopDong",
-                column: "MaDichVu",
-                unique: true);
+                unique: true,
+                filter: "[MaHopDong] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_HopDong_MaNhanVienQuanLi",
@@ -220,9 +205,11 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 column: "MaSinhVien");
 
             migrationBuilder.CreateIndex(
-                name: "IX_NhanVien_MaQL",
+                name: "IX_NhanVien_Username",
                 table: "NhanVien",
-                column: "MaQL");
+                column: "Username",
+                unique: true,
+                filter: "[Username] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Phong_MaToa",
@@ -236,23 +223,30 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_Role_Username",
+                table: "Role",
+                column: "Username",
+                unique: true,
+                filter: "[Username] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_SinhVien_MaPhong",
                 table: "SinhVien",
                 column: "MaPhong");
 
             migrationBuilder.CreateIndex(
+                name: "IX_SinhVien_Username",
+                table: "SinhVien",
+                column: "Username",
+                unique: true,
+                filter: "[Username] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Toa_MaNhanVienQuanLi",
                 table: "Toa",
                 column: "MaNhanVienQuanLi",
-                unique: true);
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_BanQuanLi_NhanVien_MaGiamDoc",
-                table: "BanQuanLi",
-                column: "MaGiamDoc",
-                principalTable: "NhanVien",
-                principalColumn: "MaNhanVien",
-                onDelete: ReferentialAction.Restrict);
+                unique: true,
+                filter: "[MaNhanVienQuanLi] IS NOT NULL");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_HoaDon_HopDong_MaHopDong",
@@ -291,10 +285,6 @@ namespace Quan_li_ky_tuc_xa.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_BanQuanLi_NhanVien_MaGiamDoc",
-                table: "BanQuanLi");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Toa_NhanVien_MaNhanVienQuanLi",
                 table: "Toa");
 
@@ -306,19 +296,13 @@ namespace Quan_li_ky_tuc_xa.Migrations
                 name: "HoaDon");
 
             migrationBuilder.DropTable(
-                name: "User");
+                name: "Role");
 
             migrationBuilder.DropTable(
                 name: "HopDong");
 
             migrationBuilder.DropTable(
-                name: "DichVu");
-
-            migrationBuilder.DropTable(
                 name: "NhanVien");
-
-            migrationBuilder.DropTable(
-                name: "BanQuanLi");
 
             migrationBuilder.DropTable(
                 name: "Phong");
@@ -328,6 +312,9 @@ namespace Quan_li_ky_tuc_xa.Migrations
 
             migrationBuilder.DropTable(
                 name: "Toa");
+
+            migrationBuilder.DropTable(
+                name: "User");
         }
     }
 }

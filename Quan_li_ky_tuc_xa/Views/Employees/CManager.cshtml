@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Quan_li_ky_tuc_xa.Models.Entities.Hop_dong>
+
+@{
+    ViewBag.Title = "Quản lý hợp đồng";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2>Danh sách Hợp đồng</h2>
+
+<div class="mb-3">
+    <input id="searchBox" class="form-control" placeholder="Nhập mã hợp đồng..." value="@ViewBag.SearchKeyword" />
+    <button id="searchBtn" class="btn btn-primary mt-2">Tìm kiếm</button>
+</div>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã hợp đồng</th>
+            <th>Tên hợp đồng</th>
+            <th>Loại hợp đồng</th>
+            <th>Ngày bắt đầu</th>
+            <th>Ngày kết thúc</th>
+            <th>Sinh viên</th>
+            <th>Nhân viên</th>
+            <th>Phòng</th>
+                <th>Cập nhật</th>
+        </tr>
+    </thead>
+    <tbody id="contractTableBody">
+        @foreach (var h in Model)
+        {
+            <tr>
+                <td>@h.MaHopDong</td>
+                <td>@h.TenHopDong</td>
+                <td>@h.LoaiHopDong</td>
+                <td>@h.NgayBatDau.ToString("dd/MM/yyyy")</td>
+                <td>@h.NgayKetThuc.ToString("dd/MM/yyyy")</td>
+                <td>@(h.Sinh_Vien?.HovaTen ?? "Không có")</td>
+                <td>@(h.Nhan_Vien?.Ten ?? "Không có")</td>
+                <td>@(h.Phong?.Ten ?? "Không có")</td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="Edit_Contract" asp-route-id="@h.MaHopDong">
+                            ✏️ 
+                        </a>||
+                        <a class="btn btn-sm btn-danger" asp-action="Delete_Contract" asp-route-id="@h.MaHopDong">
+                            🗑️ 
+                        </a>
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- ✅ Phân trang -->
+<nav>
+    <ul class="pagination justify-content-center">
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(ViewBag.CurrentPage == i ? "active" : "")">
+                <a class="page-link" href="?page=@i">@i</a>
+            </li>
+        }
+    </ul>
+</nav>
+</div>
+@section Scripts {
+    <script>
+        // 🔍 Xử lý tìm kiếm bằng AJAX
+        $("#searchBtn").click(function () {
+            const keyword = $("#searchBox").val();
+            $.ajax({
+                url: '/Employees/CManager',
+                type: 'GET',
+                data: { maHopDong: keyword },
+                success: function (res) {
+                    let rows = '';
+                    res.data.forEach(h => {
+                        rows += `
+                            <tr>
+                                <td>${h.maHopDong}</td>
+                                <td>${h.tenHopDong}</td>
+                                <td>${h.loaiHopDong}</td>
+                                <td>${new Date(h.ngayBatDau).toLocaleDateString()}</td>
+                                <td>${new Date(h.ngayKetThuc).toLocaleDateString()}</td>
+                                <td>${h.sinhVien}</td>
+                                <td>${h.nhanVien}</td>
+                                <td>${h.phong}</td>
+                                <td>
+                                    <a class="btn btn-sm btn-primary" href="/Employees/Edit_Contract/${h.maHopDong}">
+                                         ✏️ Chỉnh sửa
+                                    </a>
+                                    |
+                                    <a class="btn btn-sm btn-danger" href="/Employees/Delete_Contract/${h.maHopDong}">
+                                        🗑️ Xóa
+                                    </a>
+                                </td>
+                            </tr>`;
+                    });
+                    $("#contractTableBody").html(rows);
+                }
+            });
+        });
+    </script>
+}

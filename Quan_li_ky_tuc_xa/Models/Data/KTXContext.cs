@@ -13,8 +13,18 @@ namespace Quan_li_ky_tuc_xa.Models.Data
         public DbSet<Toa> Toas { get; set; }
         public DbSet<Phong> Phongs { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Role>(entity =>
+            {
+                entity.ToTable("Role");
+                entity.HasKey(e => e.Id);
+                entity.HasOne(r => r.User)
+                      .WithOne(u => u.Role)
+                      .HasForeignKey<Role>(r => r.Username)
+                      .OnDelete(DeleteBehavior.Restrict);
+            });
             modelBuilder.Entity<Sinh_Vien>(entity =>
             {
                 entity.ToTable("SinhVien");

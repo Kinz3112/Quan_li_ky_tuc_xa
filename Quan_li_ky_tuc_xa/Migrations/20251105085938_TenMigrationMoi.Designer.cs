@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Quan_li_ky_tuc_xa.Models.Data;
 
@@ -11,9 +12,11 @@ using Quan_li_ky_tuc_xa.Models.Data;
 namespace Quan_li_ky_tuc_xa.Migrations
 {
     [DbContext(typeof(KTXContext))]
-    partial class KTXContextModelSnapshot : ModelSnapshot
+    [Migration("20251105085938_TenMigrationMoi")]
+    partial class TenMigrationMoi
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -126,18 +129,22 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoaiPhong")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MaToa")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaTruongPhong")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SoNguoi")
                         .HasColumnType("int");
 
                     b.Property<string>("Ten")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaPhong");
@@ -145,8 +152,7 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasIndex("MaToa");
 
                     b.HasIndex("MaTruongPhong")
-                        .IsUnique()
-                        .HasFilter("[MaTruongPhong] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Phong", (string)null);
                 });
@@ -309,12 +315,14 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Toa", "Toa")
                         .WithMany("Phongs")
                         .HasForeignKey("MaToa")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", "Truong_phong")
                         .WithOne("TruongPhong")
                         .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Phong", "MaTruongPhong")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
 
                     b.Navigation("Toa");
 

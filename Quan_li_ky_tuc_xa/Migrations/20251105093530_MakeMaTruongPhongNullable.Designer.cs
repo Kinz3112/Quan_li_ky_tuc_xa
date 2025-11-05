@@ -12,8 +12,8 @@ using Quan_li_ky_tuc_xa.Models.Data;
 namespace Quan_li_ky_tuc_xa.Migrations
 {
     [DbContext(typeof(KTXContext))]
-    [Migration("20251022080754_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20251105093530_MakeMaTruongPhongNullable")]
+    partial class MakeMaTruongPhongNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -25,56 +25,12 @@ namespace Quan_li_ky_tuc_xa.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Ban_quan_li", b =>
-                {
-                    b.Property<string>("MaQL")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("DiaChi")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MaGiamDoc")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Ten")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MaQL");
-
-                    b.HasIndex("MaGiamDoc")
-                        .IsUnique();
-
-                    b.ToTable("BanQuanLi", (string)null);
-                });
-
-            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Dich_vu", b =>
-                {
-                    b.Property<string>("MaDichVu")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("NhaCungCap")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("TenDichVu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("MaDichVu");
-
-                    b.ToTable("DichVu", (string)null);
-                });
-
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Hoa_don", b =>
                 {
                     b.Property<string>("MaHoaDon")
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaHopDong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("NgayLap")
@@ -92,7 +48,8 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasKey("MaHoaDon");
 
                     b.HasIndex("MaHopDong")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MaHopDong] IS NOT NULL");
 
                     b.ToTable("HoaDon", (string)null);
                 });
@@ -103,23 +60,15 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoaiHopDong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("MaDichVu")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<string>("MaNhanVienQuanLi")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaPhong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaSinhVien")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("NgayBatDau")
@@ -129,13 +78,9 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("TenHopDong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaHopDong");
-
-                    b.HasIndex("MaDichVu")
-                        .IsUnique();
 
                     b.HasIndex("MaNhanVienQuanLi");
 
@@ -152,30 +97,28 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("ChucVu")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("GioiTinh")
                         .HasColumnType("bit");
 
-                    b.Property<string>("MaQL")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Sdt")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Ten")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MaNhanVien");
 
-                    b.HasIndex("MaQL");
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
 
                     b.ToTable("NhanVien", (string)null);
                 });
@@ -186,22 +129,18 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("LoaiPhong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MaToa")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaTruongPhong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("SoNguoi")
                         .HasColumnType("int");
 
                     b.Property<string>("Ten")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaPhong");
@@ -209,9 +148,33 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasIndex("MaToa");
 
                     b.HasIndex("MaTruongPhong")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MaTruongPhong] IS NOT NULL");
 
                     b.ToTable("Phong", (string)null);
+                });
+
+            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
+
+                    b.ToTable("Role", (string)null);
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", b =>
@@ -223,31 +186,33 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("HovaTen")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Khoa")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Lop")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MaPhong")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("NgaySinh")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Sdt")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("MaSinhVien");
 
                     b.HasIndex("MaPhong");
+
+                    b.HasIndex("Username")
+                        .IsUnique()
+                        .HasFilter("[Username] IS NOT NULL");
 
                     b.ToTable("SinhVien", (string)null);
                 });
@@ -258,17 +223,16 @@ namespace Quan_li_ky_tuc_xa.Migrations
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("MaNhanVienQuanLi")
-                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("Ten")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("MaToa");
 
                     b.HasIndex("MaNhanVienQuanLi")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[MaNhanVienQuanLi] IS NOT NULL");
 
                     b.ToTable("Toa", (string)null);
                 });
@@ -278,27 +242,25 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.Property<string>("Username")
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<int>("Loai")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("Created_At")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Last_At")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("isActive")
+                        .HasColumnType("bit");
+
                     b.HasKey("Username");
 
                     b.ToTable("User", (string)null);
-                });
-
-            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Ban_quan_li", b =>
-                {
-                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", "Giam_doc")
-                        .WithOne("Ban_Quan_Li_Giam_doc")
-                        .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Ban_quan_li", "MaGiamDoc")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Giam_doc");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Hoa_don", b =>
@@ -306,39 +268,27 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Hop_dong", "Hop_Dong")
                         .WithOne("Hoa_Don")
                         .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Hoa_don", "MaHopDong")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Hop_Dong");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Hop_dong", b =>
                 {
-                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Dich_vu", "Dich_Vu")
-                        .WithOne("Hop_Dong")
-                        .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Hop_dong", "MaDichVu")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", "Nhan_Vien")
                         .WithMany("Hop_Dongs")
                         .HasForeignKey("MaNhanVienQuanLi")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Phong", "Phong")
                         .WithMany("Hop_Dongs")
                         .HasForeignKey("MaPhong")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", "Sinh_Vien")
                         .WithMany("Hop_Dongs")
                         .HasForeignKey("MaSinhVien")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Dich_Vu");
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Nhan_Vien");
 
@@ -349,13 +299,12 @@ namespace Quan_li_ky_tuc_xa.Migrations
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", b =>
                 {
-                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Ban_quan_li", "Ban_Quan_Li")
-                        .WithMany("Nhan_Viens")
-                        .HasForeignKey("MaQL")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.User", "User")
+                        .WithOne("Nhan_Vien")
+                        .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", "Username")
+                        .OnDelete(DeleteBehavior.Restrict);
 
-                    b.Navigation("Ban_Quan_Li");
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Phong", b =>
@@ -363,18 +312,26 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Toa", "Toa")
                         .WithMany("Phongs")
                         .HasForeignKey("MaToa")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", "Truong_phong")
                         .WithOne("TruongPhong")
                         .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Phong", "MaTruongPhong")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Toa");
 
                     b.Navigation("Truong_phong");
+                });
+
+            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Role", b =>
+                {
+                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.User", "User")
+                        .WithOne("Role")
+                        .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Role", "Username")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", b =>
@@ -382,10 +339,16 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Phong", "Phong")
                         .WithMany("Sinh_Viens")
                         .HasForeignKey("MaPhong")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.User", "User")
+                        .WithOne("Sinh_Vien")
+                        .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien", "Username")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Phong");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Toa", b =>
@@ -393,37 +356,21 @@ namespace Quan_li_ky_tuc_xa.Migrations
                     b.HasOne("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", "Nhan_Vien")
                         .WithOne("Toa")
                         .HasForeignKey("Quan_li_ky_tuc_xa.Models.Entities.Toa", "MaNhanVienQuanLi")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("Nhan_Vien");
                 });
 
-            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Ban_quan_li", b =>
-                {
-                    b.Navigation("Nhan_Viens");
-                });
-
-            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Dich_vu", b =>
-                {
-                    b.Navigation("Hop_Dong")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Hop_dong", b =>
                 {
-                    b.Navigation("Hoa_Don")
-                        .IsRequired();
+                    b.Navigation("Hoa_Don");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Nhan_vien", b =>
                 {
-                    b.Navigation("Ban_Quan_Li_Giam_doc");
-
                     b.Navigation("Hop_Dongs");
 
-                    b.Navigation("Toa")
-                        .IsRequired();
+                    b.Navigation("Toa");
                 });
 
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Phong", b =>
@@ -443,6 +390,15 @@ namespace Quan_li_ky_tuc_xa.Migrations
             modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.Toa", b =>
                 {
                     b.Navigation("Phongs");
+                });
+
+            modelBuilder.Entity("Quan_li_ky_tuc_xa.Models.Entities.User", b =>
+                {
+                    b.Navigation("Nhan_Vien");
+
+                    b.Navigation("Role");
+
+                    b.Navigation("Sinh_Vien");
                 });
 #pragma warning restore 612, 618
         }
