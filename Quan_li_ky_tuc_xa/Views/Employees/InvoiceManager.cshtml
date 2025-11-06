@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Quan_li_ky_tuc_xa.Models.Entities.Hoa_don>
+@{
+    ViewBag.Title = "Quản lý hóa đơn";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2>Danh sách Hóa đơn</h2>
+
+<!-- Bộ lọc -->
+    <form method="get" class="mb-3 d-flex align-items-center gap-2">
+        <label>Trạng thái:</label>
+        <select name="trangThai" class="form-select w-auto" onchange="this.form.submit()">
+            <option value="">Tất cả</option>
+            <option value="true" selected="@(ViewBag.TrangThai == true)">Đã thanh toán</option>
+            <option value="false" selected="@(ViewBag.TrangThai == false)">Chưa thanh toán</option>
+        </select>
+    </form>
+
+<!-- Bảng dữ liệu -->
+<table class="table table-bordered table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Mã hóa đơn</th>
+            <th>Sinh viên</th>
+            <th>Tổng tiền</th>
+            <th>Ngày lập</th>
+            <th>Ngày thanh toán</th>
+            <th>Trạng thái</th>
+                <th>Cập nhật</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var hd in Model)
+        {
+            <tr>
+                <td>@hd.MaHoaDon</td>
+                    <td>@(hd.Hop_Dong?.Sinh_Vien?.HovaTen ?? "Không có")</td>
+                <td>@hd.TongTien.ToString("N0") đ</td>
+                <td>@hd.NgayLap.ToString("dd/MM/yyyy")</td>
+                <td>
+                    @if (hd.TrangThai)
+                    {
+                        @hd.NgayThanhToan.ToString("dd/MM/yyyy")
+                    }
+                    else
+                    {
+                        <span class="text-muted fst-italic">Chưa thanh toán</span>
+                    }
+                </td>
+                <td>
+                    @if (hd.TrangThai)
+                    {
+                        <span class="badge bg-success">Đã thanh toán</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">Chưa thanh toán</span>
+                    }
+                </td>
+                    <td>
+                        <a class="btn btn-sm btn-primary" asp-action="Edit_HoaDon" asp-route-id="@hd.MaHoaDon">
+                            ✏️ Chỉnh sửa
+                        </a>
+                    </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<!-- Phân trang -->
+    <nav aria-label="Page navigation">
+        <ul class="pagination justify-content-center">
+            @for (int i = 1; i <= ViewBag.TotalPages; i++)
+            {
+                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                    <a class="page-link"
+                       asp-action="HoaDonManager"
+                       asp-route-trangThai="@ViewBag.TrangThai"
+                       asp-route-page="@i">@i</a>
+                </li>
+            }
+        </ul>
+    </nav>
+</div>

@@ -8,8 +8,7 @@
 <h2>Danh sách Hợp đồng</h2>
 
 <div class="mb-3">
-    <input id="searchBox" class="form-control" placeholder="Nhập mã hợp đồng..." value="@ViewBag.SearchKeyword" />
-    <button id="searchBtn" class="btn btn-primary mt-2">Tìm kiếm</button>
+    <input id="searchBox" class="form-control" placeholder="Nhập mã hợp đồng..." value="@ViewBag.SearchKeyword" /> <button id="searchBtn" class="btn btn-primary mt-2">Tìm kiếm</button>
 </div>
 
 <table class="table table-bordered">
@@ -101,4 +100,12 @@
             });
         });
     </script>
+}
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger">@TempData["ErrorMessage"]</div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success">@TempData["SuccessMessage"]</div>
 }

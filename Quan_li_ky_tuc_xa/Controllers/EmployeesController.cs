@@ -23,19 +23,23 @@ namespace Quan_li_ky_tuc_xa.Controllers
         {
             int pageSize = 10;
 
+            // 🔹 Include Toa, Truong_phong, và Sinh_Viens để đếm số người
             var query = db.Phongs
                 .Include(p => p.Truong_phong)
                 .Include(p => p.Toa)
+                .Include(p => p.Sinh_Viens) // cần có navigation này trong model Phong
                 .AsQueryable();
 
+            // 🔹 Lọc theo số người (đếm từ danh sách sinh viên)
             if (soNguoi.HasValue)
             {
-                query = query.Where(p => p.SoNguoi == soNguoi.Value);
+                query = query.Where(p => p.Sinh_Viens.Count == soNguoi.Value);
             }
 
             var totalPhong = await query.CountAsync();
             var totalPages = (int)Math.Ceiling(totalPhong / (double)pageSize);
 
+            // 🔹 Lấy dữ liệu trang hiện tại
             var phongs = await query
                 .OrderBy(p => p.MaPhong)
                 .Skip((page - 1) * pageSize)
@@ -46,12 +50,12 @@ namespace Quan_li_ky_tuc_xa.Controllers
                     p.Ten,
                     Toa = p.Toa.Ten,
                     p.LoaiPhong,
-                    p.SoNguoi,
+                    SoNguoi = p.Sinh_Viens.Count, // ✅ Tự động đếm số sinh viên trong phòng
                     TruongPhong = p.Truong_phong != null ? p.Truong_phong.HovaTen : "Không có"
                 })
                 .ToListAsync();
 
-            
+            // 🔹 Nếu là AJAX request → trả về JSON
             if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
             {
                 return Json(new
@@ -62,11 +66,20 @@ namespace Quan_li_ky_tuc_xa.Controllers
                 });
             }
 
-            
+            // 🔹 Nếu là request thông thường → trả View
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = totalPages;
-            return View(await query.Take(pageSize).ToListAsync());
+
+            // Dùng Select tương tự để View hiển thị thống nhất
+            var phongsList = await query
+                .OrderBy(p => p.MaPhong)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            return View(phongsList);
         }
+
         public IActionResult Edit_Phong(string id)
         {
             if (id == null || db.Phongs == null)
@@ -84,13 +97,13 @@ namespace Quan_li_ky_tuc_xa.Controllers
                 return NotFound();
             }
 
-            ViewBag.MaTruongPhong = new SelectList(db.Sinh_Viens.Where(sv => sv.MaPhong == phong.MaPhong),"MaSinhVien","HovaTen",phong.MaTruongPhong);
+            ViewBag.MaTruongPhong = new SelectList(db.Sinh_Viens.Where(sv => sv.MaPhong == phong.MaPhong), "MaSinhVien", "HovaTen", phong.MaTruongPhong);
 
             return View(phong);
         }
 
         // POST: Phong/Edit
-       [HttpPost]
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit_Phong(string id, [Bind("MaPhong,Ten,MaToa,LoaiPhong,SoNguoi,MaTruongPhong")] Phong phong)
         {
@@ -214,16 +227,9 @@ namespace Quan_li_ky_tuc_xa.Controllers
                 return NotFound();
             }
 
-            // ✅ Luôn đảm bảo ViewBag có dữ liệu, tránh null
-            //ViewBag.MaSinhVien = new SelectList(db.Sinh_Viens?.ToList() ?? new List<Sinh_Vien>(), "MaSinhVien", "HovaTen", hopdong.MaSinhVien);
-            //ViewBag.MaNhanVien = new SelectList(db.Nhan_Viens?.ToList() ?? new List<Nhan_vien>(), "MaNhanVien", "HovaTen", hopdong.MaNhanVienQuanLi);
-            //ViewBag.MaPhong = new SelectList(db.Phongs?.ToList() ?? new List<Phong>(), "MaPhong", "Ten", hopdong.MaPhong);
-            ViewBag.MaSinhVien = new SelectList(db.Sinh_Viens.Where(sv => sv.MaSinhVien == hopdong.MaSinhVien), "MaSinhVien", "HovaTen", hopdong.MaSinhVien);
-            ViewBag.MaNhanVienQuanLi = new SelectList(db.Nhan_Viens.Where(sv => sv.MaNhanVien == hopdong.MaNhanVienQuanLi), "MaNhanVien", "Ten", hopdong.MaNhanVienQuanLi);
-            ViewBag.MaPhong= new SelectList(db.Phongs.Where(sv => sv.MaPhong == hopdong.MaPhong), "MaPhong", "Ten", hopdong.MaPhong);
-
-
-
+            //ViewBag.MaSinhVien = new SelectList(db.Sinh_Viens.Where(sv => sv.MaSinhVien == hopdong.MaSinhVien), "MaSinhVien", "HovaTen", hopdong.MaSinhVien);
+            //ViewBag.MaNhanVienQuanLi = new SelectList(db.Nhan_Viens.Where(sv => sv.MaNhanVien == hopdong.MaNhanVienQuanLi), "MaNhanVien", "Ten", hopdong.MaNhanVienQuanLi);
+            //ViewBag.MaPhong= new SelectList(db.Phongs.Where(sv => sv.MaPhong == hopdong.MaPhong), "MaPhong", "Ten", hopdong.MaPhong);
 
             return View(hopdong);
         }
@@ -261,16 +267,186 @@ namespace Quan_li_ky_tuc_xa.Controllers
                     }
                 }
             }
-
-            // Nếu có lỗi, load lại dropdown
-            ViewBag.MaSinhVien = new SelectList(db.Sinh_Viens, "MaSinhVien", "HovaTen", hopdong.MaSinhVien);
-            ViewBag.MaNhanVien = new SelectList(db.Nhan_Viens, "MaNhanVien", "HovaTen", hopdong.MaNhanVienQuanLi);
-            ViewBag.MaPhong = new SelectList(db.Phongs, "MaPhong", "Ten", hopdong.MaPhong);
-
             return View(hopdong);
         }
 
+
+        // GET: Employees/Delete_Contract/id
+        public IActionResult Delete_Contract(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var hopdong = db.Hop_Dongs
+                .Include(h => h.Sinh_Vien)
+                .Include(h => h.Nhan_Vien)
+                .Include(h => h.Phong)
+                .FirstOrDefault(h => h.MaHopDong == id);
+
+            if (hopdong == null)
+            {
+                return NotFound();
+            }
+
+            return View(hopdong);
+        }
+        [HttpPost, ActionName("Delete_Contract")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(string id)
+        {
+            // 1️⃣ Tìm hợp đồng theo mã
+            var hopdong = await db.Hop_Dongs
+                .Include(h => h.Hoa_Don)
+                .Include(h => h.Sinh_Vien)
+                .FirstOrDefaultAsync(h => h.MaHopDong == id);
+
+            if (hopdong == null)
+                return NotFound();
+
+            // 2️⃣ Kiểm tra hóa đơn liên quan
+            if (hopdong.Hoa_Don != null)
+            {
+                if (hopdong.Hoa_Don.TrangThai == true)
+                {
+                    // 3️⃣ Xóa hóa đơn
+                    db.Hoa_Dons.Remove(hopdong.Hoa_Don);
+
+                    // 4️⃣ Xóa sinh viên thuộc hợp đồng
+                    if (hopdong.Sinh_Vien != null)
+                    {
+                        db.Sinh_Viens.Remove(hopdong.Sinh_Vien);
+                    }
+
+                    // 5️⃣ Xóa hợp đồng
+                    db.Hop_Dongs.Remove(hopdong);
+
+                    // 6️⃣ Lưu thay đổi
+                    await db.SaveChangesAsync();
+
+                    TempData["SuccessMessage"] = "Đã xóa hợp đồng, hóa đơn và sinh viên thành công.";
+                    return RedirectToAction(nameof(CManager));
+                }
+                else
+                {
+                    // ❌ Hóa đơn chưa thanh toán
+                    TempData["ErrorMessage"] = "Không thể xóa hợp đồng vì hóa đơn chưa thanh toán (TrangThai = false).";
+                    return RedirectToAction(nameof(CManager));
+                }
+            }
+            else
+            {
+                // ❌ Không có hóa đơn
+                TempData["ErrorMessage"] = "Hợp đồng này chưa có hóa đơn, không thể xóa.";
+                return RedirectToAction(nameof(CManager));
+            }
+        }
+
+        //Invoice MANAGER
+        public async Task<IActionResult> InvoiceManager(bool? trangThai, int page = 1)
+        {
+            int pageSize = 10;
+
+            // 1️⃣ Tạo query
+            var query = db.Hoa_Dons
+                .Include(h => h.Hop_Dong)
+                .ThenInclude(hd => hd.Sinh_Vien)
+                .AsQueryable();
+
+            // 2️⃣ Lọc theo trạng thái nếu có
+            if (trangThai.HasValue)
+            {
+                query = query.Where(h => h.TrangThai == trangThai.Value);
+            }
+
+            // 3️⃣ Đếm tổng số bản ghi
+            var totalHoaDon = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalHoaDon / (double)pageSize);
+
+            // 4️⃣ Lấy dữ liệu phân trang
+            var hoaDons = await query
+                .OrderByDescending(h => h.NgayLap) // sắp xếp mới nhất lên đầu
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            // 5️⃣ Gửi dữ liệu sang View
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TrangThai = trangThai;
+
+            return View(hoaDons);
+        }
+        
+        public async Task<IActionResult> Edit_HoaDon(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+                return NotFound();
+
+            var hoadon = await db.Hoa_Dons
+                .Include(h => h.Hop_Dong)
+                .ThenInclude(hd => hd.Sinh_Vien)
+                .FirstOrDefaultAsync(h => h.MaHoaDon == id);
+
+            if (hoadon == null)
+                return NotFound();
+
+            // Truyền thêm danh sách hợp đồng nếu muốn thay đổi
+            ViewBag.HopDongList = db.Hop_Dongs
+                .Select(h => new { h.MaHopDong, Ten = h.TenHopDong })
+                .ToList();
+
+            return View(hoadon);
+        }
+
+        // ✅ Xử lý khi bấm "Lưu"
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit_HoaDon(string id, Hoa_don model)
+        {
+            if (id != model.MaHoaDon)
+                return BadRequest();
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var hoadon = await db.Hoa_Dons.FindAsync(id);
+                    if (hoadon == null)
+                        return NotFound();
+
+                    // Cập nhật thông tin
+                    hoadon.TongTien = model.TongTien;
+                    hoadon.TrangThai = model.TrangThai;
+                    hoadon.NgayLap = model.NgayLap;
+
+                    // Nếu hóa đơn đã thanh toán → cập nhật NgàyThanhToan
+                    if (model.TrangThai)
+                    {
+                        hoadon.NgayThanhToan = DateTime.Now;
+                    }
+                    else
+                    {
+                        hoadon.NgayThanhToan = DateTime.MinValue; // hoặc để null nếu bạn cho phép null
+                    }
+
+                    await db.SaveChangesAsync();
+                    TempData["SuccessMessage"] = "Cập nhật hóa đơn thành công!";
+                    return RedirectToAction(nameof(InvoiceManager));
+                }
+                catch (Exception ex)
+                {
+                    TempData["ErrorMessage"] = "Lỗi: " + ex.Message;
+                }
+            }
+
+            ViewBag.HopDongList = db.Hop_Dongs
+                .Select(h => new { h.MaHopDong, Ten = h.TenHopDong })
+                .ToList();
+
+            return View(model);
+        }
+
     }
-
 }
-

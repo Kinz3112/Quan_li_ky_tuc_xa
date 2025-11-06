@@ -1,0 +1,54 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Hop_dong
+
+@{
+    ViewBag.Title = "Xóa hợp đồng";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2>Xóa hợp đồng</h2>
+
+<div class="alert alert-warning">
+    <strong>Bạn có chắc muốn xóa hợp đồng này không?</strong>
+</div>
+
+<table class="table table-bordered">
+    <tr>
+        <th>Mã hợp đồng</th>
+        <td>@Model.MaHopDong</td>
+    </tr>
+    <tr>
+        <th>Tên hợp đồng</th>
+        <td>@Model.TenHopDong</td>
+    </tr>
+    <tr>
+        <th>Loại hợp đồng</th>
+        <td>@Model.LoaiHopDong</td>
+    </tr>
+    <tr>
+        <th>Ngày bắt đầu</th>
+        <td>@Model.NgayBatDau.ToShortDateString()</td>
+    </tr>
+    <tr>
+        <th>Ngày kết thúc</th>
+        <td>@Model.NgayKetThuc.ToShortDateString()</td>
+    </tr>
+    <tr>
+        <th>Sinh viên</th>
+        <td>@Model.Sinh_Vien?.HovaTen</td>
+    </tr>
+    <tr>
+        <th>Nhân viên quản lý</th>
+        <td>@Model.Nhan_Vien?.Ten</td>
+    </tr>
+    <tr>
+        <th>Phòng</th>
+        <td>@Model.Phong?.Ten</td>
+    </tr>
+</table>
+
+<form asp-action="Delete_Contract" method="post">
+    <input type="hidden" asp-for="MaHopDong" />
+    <button type="submit" class="btn btn-danger">Xóa</button>
+    <a asp-action="CManager" class="btn btn-secondary">Hủy</a>
+</form>
+</div>

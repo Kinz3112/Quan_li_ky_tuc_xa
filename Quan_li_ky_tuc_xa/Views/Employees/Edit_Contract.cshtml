@@ -35,20 +35,20 @@
 
     <div class="form-group">
         <label>Sinh viên</label>
-        <select asp-for="MaSinhVien" asp-items="ViewBag.MaSinhVien" class="form-control"></select>
+        <input asp-for="MaSinhVien" class="form-control" />
     </div>
 
     <div class="form-group">
         <label>Nhân viên quản lý</label>
-        <select asp-for="MaNhanVienQuanLi" asp-items="ViewBag.MaNhanVien" class="form-control"></select>
+        <input asp-for="MaNhanVienQuanLi" class="form-control" />
     </div>
 
     <div class="form-group">
         <label>Phòng</label>
-        <select asp-for="MaPhong" asp-items="ViewBag.MaPhong" class="form-control"></select>
+        <input asp-for="MaPhong" class="form-control" />
     </div>
 
     <button type="submit" class="btn btn-success">💾 Lưu thay đổi</button>
-    <a asp-action="ContractManager" class="btn btn-secondary">⬅️ Quay lại</a>
+    <a asp-action="CManager" class="btn btn-secondary">⬅️ Quay lại</a>
 </form>
 </div>

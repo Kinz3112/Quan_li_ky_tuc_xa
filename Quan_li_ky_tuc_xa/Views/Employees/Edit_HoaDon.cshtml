@@ -1,0 +1,44 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Hoa_don
+@{
+    ViewData["Title"] = "Chỉnh sửa hóa đơn";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2 class="mb-3">Chỉnh sửa hóa đơn</h2>
+
+<form asp-action="Edit_HoaDon" method="post">
+    <input type="hidden" asp-for="MaHoaDon" />
+
+    <div class="mb-3">
+        <label class="form-label">Mã hợp đồng</label>
+        <input class="form-control" value="@Model.MaHopDong" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Tổng tiền</label>
+        <input asp-for="TongTien" class="form-control" type="number" step="0.01" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Ngày lập</label>
+        <input asp-for="NgayLap" class="form-control" type="date" />
+    </div>
+
+    <div class="mb-3 form-check">
+        <input asp-for="TrangThai" class="form-check-input" />
+        <label asp-for="TrangThai" class="form-check-label">Đã thanh toán</label>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a asp-action="InvoiceManager" class="btn btn-secondary">Quay lại</a>
+</form>
+
+@* @if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger mt-3">@TempData["ErrorMessage"]</div>
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+} *@
+</div>
