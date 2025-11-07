@@ -1,25 +1,49 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Quan_li_ky_tuc_xa.Models.Data;
+using Microsoft.AspNetCore.Authentication.Cookies;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
-// ✅ Đăng ký DbContext trước khi build
+// DbContext
 builder.Services.AddDbContext<KTXContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("KTXConnection")));
 
-// Add services to the container.
+// MVC
 builder.Services.AddControllersWithViews();
-builder.Services.AddSession();
-builder.Services.AddHttpContextAccessor();
+
+// Session & cache
+builder.Services.AddDistributedMemoryCache();
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromHours(8);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+// Cookie authentication
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Acc/Login";
+        options.LogoutPath = "/Acc/Logout";
+        options.AccessDeniedPath = "/Acc/AccessDenied";
+        options.ExpireTimeSpan = TimeSpan.FromHours(8);
+        options.SlidingExpiration = true;
+        options.Cookie.Name = "KTXAuth";
+    });
+
+builder.Services.AddAuthorization();
+
 var app = builder.Build();
 
-// ✅ Chạy khởi tạo dữ liệu (nếu có DbInitializer)
+// optional DB init
 using (var scope = app.Services.CreateScope())
 {
     var services = scope.ServiceProvider;
-    //DbInitializer.Initialize(services);
+    // DbInitializer.Initialize(services);
 }
-// Configure the HTTP request pipeline.
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -29,10 +53,15 @@ if (!app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+
+app.UseSession();         // session first
+app.UseAuthentication();  // then authentication
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    pattern: "{controller=Acc}/{action=Login}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.Run();
+
+

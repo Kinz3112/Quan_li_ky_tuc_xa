@@ -1,0 +1,39 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <!-- Styles (place your CSS files into wwwroot/css/) -->
+    <link rel="stylesheet" href="~/css/styles.css">
+    <link rel="stylesheet" href="~/css/font-awesome.min.css">
+    <link rel="stylesheet" href="~/css/templatemo_main.css">
+    <link rel="stylesheet" href="~/css/bootstrap.min.css">
+    <link rel="stylesheet" href="~/css/custom.css">
+</head>
+<body style="">
+    <div>
+        <partial name="_Top" />
+    </div>
+    <partial name="_StudentLeftMenu" />
+    <main>
+        @RenderBody()
+    </main>
+
+    <partial name="_Footer" />
+
+    <!-- Scripts (place your JS files into wwwroot/js/) -->
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/templatemo_script.js"></script>
+
+    <!-- Visual Studio Browser Link -->
+    <script type="text/javascript" src="/_vs/browserLink" async="async" id="__browserLink_initializationData" data-requestid="3a545e79a9c840ea9152be30635ecea7" data-requestmappingfromserver="false" data-connecturl="http://localhost:63029/39e6319a066e4d61b599c7e292c9f9a1/browserLink"></script>
+    <!-- End Browser Link -->
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

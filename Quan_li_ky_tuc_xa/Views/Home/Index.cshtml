@@ -1,8 +1,289 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "~/Views/Shared/Components/Home/Home.cshtml";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div class="templatemo-content">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="css/templatemo_main.css" />
+
+    <!-- === Wrapper chính (mỗi trang có 1 template-page-wrapper) === -->
+    <div class="template-page-wrapper fullwidth">
+        <!-- add fullwidth nếu bạn muốn ẩn sidebar cho trang này -->
+        <!-- === TOPBAR: search (left) + welcome/logout (right) in a rounded box === -->
+        <div class="tm-topbox-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+
+                    
+
+                    <!-- MAIN CONTENT -->
+                    <main class="col-md-9 templatemo-content-wrapper" role="main">
+
+                        <!-- ===== Nội dung trang chủ: Giới thiệu Ký túc xá ===== -->
+                        <!-- Breadcrumb (cập nhật các đường dẫn nếu cần) -->
+                        <ol class="breadcrumb">
+                            <li><a href="/">Trang chủ</a></li>
+                            <li><a href="#">Giới thiệu</a></li>
+                            <li class="active">Ký túc xá</li>
+                        </ol>
+
+                        <!-- Tiêu đề chính + mô tả ngắn -->
+                        <h1>Ký túc xá - Trường Đại học Giao thông Vận tải</h1>
+                        <p>
+                            Ký túc xá Trường Đại học Giao thông Vận tải là không gian sinh hoạt tập trung dành cho sinh viên trong và ngoài trường,
+                            cung cấp chỗ ở an toàn, thoải mái, gần khu giảng đường và thuận tiện cho giao thông. Chúng tôi kết hợp tiện nghi hiện đại
+                            với môi trường học tập thân thiện nhằm hỗ trợ sinh viên toàn diện về học tập và đời sống.
+                        </p>
+
+                        <!-- Thông báo nhanh -->
+                        <div class="margin-bottom-30">
+                            <div class="alert alert-success" role="alert">
+                                <strong>Thông báo:</strong> Đăng ký chỗ ở học kỳ tới bắt đầu từ 01/11 — sinh viên vui lòng nộp hồ sơ tại Phòng Quản lý KTX hoặc qua cổng thông tin sinh viên.
+                            </div>
+                        </div>
+
+                        <!-- Tổng quan nhanh: sắp xếp 3 cột -->
+                        <div class="row margin-bottom-30">
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><strong>Sứ mệnh</strong></div>
+                                    <div class="panel-body">
+                                        Cung cấp chỗ ở an toàn, giá cả hợp lý; tạo môi trường hỗ trợ sinh viên phát triển kỹ năng học tập và giao tiếp; đóng góp vào chất lượng đào tạo toàn trường.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><strong>Tầm nhìn</strong></div>
+                                    <div class="panel-body">
+                                        Trở thành ký túc xá mẫu mực, hiện đại và thân thiện sinh viên, đáp ứng được nhu cầu chỗ ở cho sinh viên trong khu vực miền Bắc.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-4">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><strong>Giá trị cốt lõi</strong></div>
+                                    <div class="panel-body">
+                                        An toàn • Tiện nghi • Tiết kiệm • Hỗ trợ học tập • Tôn trọng cộng đồng.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Các tiện ích nổi bật -->
+                        <h3>Tiện ích nổi bật</h3>
+                        <ul>
+                            <li>Wifi miễn phí toàn khu vực với băng thông đủ cho học tập và giải trí.</li>
+                            <li>Phòng tự học, khu đọc sách, và phòng máy tính phục vụ học tập nhóm.</li>
+                            <li>Phòng giặt là, nhà ăn phục vụ suất ăn hàng ngày, cửa hàng tiện lợi.</li>
+                            <li>An ninh 24/7, camera tại các hành lang chính và hệ thống kiểm soát ra vào.</li>
+                            <li>Khu vực thể thao ngoài trời: sân cầu lông, sân bóng mini, phòng tập thể hình.</li>
+                        </ul>
+
+                        <!-- Các loại phòng -->
+                        <h3>Loại phòng & Giá tham khảo</h3>
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">Phòng 4 giường (tiết kiệm)</div>
+                                    <div class="panel-body">
+                                        - Diện tích: ~20 m². <br />
+                                        - Trang bị: giường tầng, tủ đồ cá nhân, quạt, ổ cắm. <br />
+                                        - Giá tham khảo: 350.000 - 450.000 VND/tháng.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">Phòng 2 giường (tiêu chuẩn)</div>
+                                    <div class="panel-body">
+                                        - Diện tích: ~14 m². <br />
+                                        - Trang bị: giường đơn, bàn học, ghế, tủ, hệ thống đèn đọc sách. <br />
+                                        - Giá tham khảo: 650.000 - 850.000 VND/tháng.
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="panel panel-info">
+                                    <div class="panel-heading">Phòng đơn/Studio (cao cấp)</div>
+                                    <div class="panel-body">
+                                        - Diện tích: 20–30 m², phòng tắm khép kín, bếp nhỏ (tùy tòa nhà). <br />
+                                        - Giá tham khảo: 1.200.000 - 1.800.000 VND/tháng.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bảng thông tin mẫu (nhân sự quản lý hoặc danh sách mẫu) -->
+                        <h3>Nhân sự quản lý & hỗ trợ</h3>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Chức vụ</th>
+                                    <th>Họ và tên</th>
+                                    <th>Liên hệ</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Trưởng phòng Ký túc xá</td>
+                                    <td>TS. Nguyễn Văn A</td>
+                                    <td>0236 123 4567</td>
+                                </tr>
+                                <tr>
+                                    <td>Phòng Quản lý</td>
+                                    <td>Ms. Trần Thị B</td>
+                                    <td>ktx@ut.edu.vn</td>
+                                </tr>
+                                <tr>
+                                    <td>An ninh 24/7</td>
+                                    <td>Ban An ninh KTX</td>
+                                    <td>0236 765 4321</td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Các quy định cơ bản -->
+                        <h3>Quy định cơ bản</h3>
+                        <ul>
+                            <li>Tuân thủ nội quy giờ giấc: giới hạn giờ thăm (nếu có) và giờ yên tĩnh học tập.</li>
+                            <li>Bảo quản tài sản chung — không hút thuốc trong phòng và hành lang.</li>
+                            <li>Không nuôi thú cưng trong phòng (trừ trường hợp được phép đặc biệt).</li>
+                            <li>Thanh toán tiền phòng đúng hạn hàng tháng; thông báo trước nếu tạm ngưng hoặc chuyển đi.</li>
+                        </ul>
+
+                        <!-- Khu vực đánh giá / testimonial -->
+                        <h3>Phản hồi của sinh viên</h3>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <blockquote>
+                                    "Ký túc xá sạch sẽ, an ninh tốt và rất gần khu học. Nhân viên hỗ trợ nhiệt tình." <br />
+                                    <small>— Nguyễn Thị C, Sinh viên năm 3</small>
+                                </blockquote>
+                            </div>
+                            <div class="col-md-6">
+                                <blockquote>
+                                    "Wifi ổn, có phòng tự học mở cửa 24/7 giúp tụi mình ôn bài trước kỳ thi." <br />
+                                    <small>— Lê Văn D, Sinh viên năm 2</small>
+                                </blockquote>
+                            </div>
+                        </div>
+
+                        <!-- Thống kê nhanh -->
+                        <h3>Số liệu nhanh</h3>
+                        <ul>
+                            <li>Tổng số giường: 1.200+</li>
+                            <li>Số toà nhà: 6</li>
+                            <li>Tỷ lệ lấp đầy trung bình: ~78%</li>
+                        </ul>
+
+                        <!-- Hướng dẫn đăng ký -->
+                        <h3>Hướng dẫn đăng ký chỗ ở</h3>
+                        <ol>
+                            <li>Chuẩn bị hồ sơ: CMND/CCCD, giấy báo/trong danh sách sinh viên, đơn đăng ký (mẫu có tại Phòng KTX).</li>
+                            <li>Nộp hồ sơ trực tiếp tại Phòng Quản lý KTX hoặc qua hệ thống cổng thông tin sinh viên.</li>
+                            <li>Thanh toán phí tạm ứng (nếu có) và nhận thông báo xác nhận chỗ ở.</li>
+                        </ol>
+                        <p><strong>Lưu ý:</strong> Ưu tiên xét theo thứ tự nộp hồ sơ và mức học bổng/hoàn cảnh gia đình (nếu có chính sách ưu tiên).</p>
+
+                        <!-- Thông tin liên hệ & kêu gọi hành động -->
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <h4>Liên hệ & Hỗ trợ</h4>
+                                <p>
+                                    <strong>Phòng Quản lý Ký túc xá</strong><br />
+                                    Địa chỉ: 123 Đường Giao Thông, Thành phố X<br />
+                                    Điện thoại: <a href="tel:+842361234567">0236 123 4567</a> — Email: <a href="mailto:ktx@ut.edu.vn">ktx@ut.edu.vn</a>
+                                </p>
+
+                                <p class="text-center">
+                                    <a class="btn btn-primary" href="/Account/Login">Đăng ký chỗ ở</a>
+                                    <a class="btn btn-default" href="/Contact">Liên hệ trực tiếp</a>
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Tin tức / sự kiện ngắn -->
+                        <h3>Tin tức & Sự kiện</h3>
+                        <ul>
+                            <li><strong>01/11:</strong> Mở đăng ký chỗ học kỳ 2 — xem hướng dẫn chi tiết tại Phòng Quản lý KTX.</li>
+                            <li><strong>15/12:</strong> Sự kiện "Ngày hội Sinh viên KTX" — hoạt động văn nghệ và thể thao.</li>
+                        </ul>
+
+                        <!-- Footer nhỏ: copyright -->
+                        <p class="text-muted" style="margin-top:18px;">© @DateTime.Now.Year Ký túc xá - Trường Đại học Giao thông Vận tải. Mọi quyền được bảo lưu.</p>
+
+                    </main> <!-- /.templatemo-content-wrapper -->
+
+                </div> <!-- /.row -->
+            </div> <!-- /.container-fluid -->
+            <!-- Modal confirm logout -->
+            <div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">Bạn có chắc chắn muốn đăng xuất?</h4>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="/Account/Logout" class="btn btn-primary">Có</a>
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Không</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- /.tm-topbox-wrapper -->
+        <!-- Scripts: đặt ở cuối để tải nhanh -->
+        <script src="js/jquery.min.js"></script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/Chart.min.js"></script>
+        <script src="js/templatemo_script.js"></script>
+        <script type="text/javascript">
+            // Line chart example
+            var randomScalingFactor = function(){ return Math.round(Math.random()*100) };
+            var lineChartData = {
+                labels : ["Jan","Feb","Mar","Apr","May","Jun","Jul"],
+                datasets : [
+                    { label: "A", data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] },
+                    { label: "B", data : [randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor(),randomScalingFactor()] }
+                ]
+            };
+            window.onload = function(){
+                var ctx = document.getElementById("templatemo-line-chart")?.getContext("2d");
+                if (ctx) { window.myLine = new Chart(ctx, { type: 'line', data: lineChartData, options: { responsive: true } }); }
+            };
+        </script>
+        <script>
+            (function($){
+                // 1) Khi hamburger click: toggle bootstrap collapse on .templatemo-sidebar (mobile)
+                // và toggle desktop-hidden class on body/template for desktop.
+                $('.tm-hamburger').on('click', function(e){
+                    e.preventDefault();
+                    // bootstrap collapse toggle (works on mobile or when .collapse present)
+                    $('.templatemo-sidebar').collapse('toggle');
+
+                    // additionally toggle a desktop class (so desktop can hide/show too)
+                    // Use .template-page-wrapper as container if you prefer, here we toggle on <body>
+                    $('body').toggleClass('sidebar-hidden-desktop');
+                });
+
+                // 2) If window resized to mobile, ensure body class removed to avoid conflict
+                $(window).on('resize', function(){
+                    if ($(window).width() <= 767) {
+                        $('body').removeClass('sidebar-hidden-desktop');
+                    }
+                });
+
+                // 3) Optionally: if collapse shown (mobile), focus search input
+                $('.templatemo-sidebar').on('shown.bs.collapse', function () {
+                    $('#q').focus();
+                });
+            })(jQuery);
+        </script>
+
+    </div> <!-- /.template-page-wrapper -->
+</div> <!-- /.templatemo-content -->

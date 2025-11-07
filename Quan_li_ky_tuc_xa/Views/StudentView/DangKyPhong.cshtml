@@ -1,0 +1,278 @@
+﻿@{
+    ViewData["Title"] = "Đăng ký nội trú";
+    Layout = "~/Views/Shared/Components/Students/StudentViewLayout.cshtml";
+}
+<div class="templatemo-content">
+    <link rel="stylesheet" href="/css/templatemo_main.css" />
+
+    <div class="template-page-wrapper fullwidth">
+        <div class="tm-topbox-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <main class="col-md-9 templatemo-content-wrapper" role="main">
+                        <ol class="breadcrumb">
+                            <li><a href="Students">Trang chủ</a></li>
+                            <li class="active">Đăng ký nội trú</li>
+                        </ol>
+
+                        <h2>Đăng ký chỗ ở nội trú</h2>
+                        <p>Vui lòng điền đầy đủ thông tin để phòng quản lý xét duyệt hồ sơ đăng ký nội trú.</p>
+
+                        @if (TempData["Success"] != null)
+                        {
+                            <div class="alert alert-success">@TempData["Success"]</div>
+                        }
+                        @if (TempData["Error"] != null)
+                        {
+                            <div class="alert alert-danger">@TempData["Error"]</div>
+                        }
+
+                        <div class="row">
+                            <div class="col-md-7">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><strong>Thông tin sinh viên</strong></div>
+                                    <div class="panel-body">
+                                        <!-- Form gửi MaPhong (string) -->
+                                        <form asp-action="DangKyPhong" method="post" novalidate>
+                                            @Html.AntiForgeryToken()
+
+                                            <div class="form-group">
+                                                <label for="PhongSelect">Phòng mong muốn</label>
+                                                <select name="MaPhong" id="PhongSelect" class="form-control" aria-label="Phòng mong muốn">
+                                                    <option value="">-- Chọn phòng (nếu muốn) --</option>
+                                                    @* Option sẽ được render bằng JS từ ViewBag.RoomsJson *@
+                                                </select>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="NgayPhanBo">Ngày đăng ký</label>
+                                                <input name="NgayPhanBo" id="NgayPhanBo" class="form-control" type="date"
+                                                       value="@DateTime.Today.ToString("yyyy-MM-dd")" />
+                                            </div>
+
+                                            <div class="form-group">
+                                                <label for="TrangThai">Trạng thái</label>
+                                                <input name="TrangThai" id="TrangThai" class="form-control" readonly value="Chờ duyệt" />
+                                            </div>
+
+                                            <hr />
+                                            <button type="submit" class="btn btn-primary">Gửi đăng ký</button>
+                                            <a href="/Students" class="btn btn-default">Hủy</a>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="panel panel-default">
+                                    <div class="panel-heading"><strong>Phòng trống (chọn để xem)</strong></div>
+                                    <div class="panel-body">
+                                        <div class="form-row mb-2">
+                                            <div class="col-6">
+                                                <label for="LoaiPhongSelect" class="form-label small">Loại phòng</label>
+                                                <select id="LoaiPhongSelect" class="form-control">
+                                                    <option value="">-- Tất cả loại --</option>
+                                                    @if (ViewBag.LoaiPhongList != null)
+                                                    {
+                                                        foreach (var item in (IEnumerable<string>)ViewBag.LoaiPhongList)
+                                                        {
+                                                            <option value="@item">@item</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-6">
+                                                <label for="ToaSelect" class="form-label small">Tòa</label>
+                                                <select id="ToaSelect" class="form-control">
+                                                    <option value="">-- Tất cả tòa --</option>
+                                                    @if (ViewBag.ToaList != null)
+                                                    {
+                                                        foreach (var item in (IEnumerable<string>)ViewBag.ToaList)
+                                                        {
+                                                            <option value="@item">@item</option>
+                                                        }
+                                                    }
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <input id="filterSearch" class="form-control" placeholder="Tìm mã hoặc tên phòng..." aria-label="Tìm phòng" />
+                                        </div>
+
+                                        <div class="mb-2">
+                                            <span id="roomsCount" class="small text-muted">Tổng: <strong>0</strong> phòng trống</span>
+                                        </div>
+
+                                        <div class="table-responsive" style="max-height:400px; overflow:auto;">
+                                            <table class="table table-striped table-hover" id="roomsTable" aria-describedby="roomsCount">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Mã phòng</th>
+                                                        <th>Tên phòng</th>
+                                                        <th>Loại</th>
+                                                        <th>Tòa</th>
+                                                        <th>Số người</th>
+                                                        <th>Còn</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="roomsTbody">
+                                                    @* JS sẽ render từ ViewBag.RoomsJson *@
+                                                </tbody>
+                                            </table>
+
+                                            <div id="noRoomsMessage" class="text-center text-muted" style="display:none; padding:20px;">
+                                                <i>Không có phòng trống phù hợp.</i>
+                                            </div>
+                                        </div>
+                                        <p class="text-muted small">Nhấp vào hàng để chọn phòng - khi chọn sẽ điền vào ô "Phòng mong muốn".</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <!-- Scripts -->
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+
+        <script>
+            // Dữ liệu phòng từ controller (ViewBag.RoomsJson)
+            // Nếu ViewBag.RoomsJson null/empty thì fallback []
+            var roomsJsonString = '@(ViewBag.RoomsJson ?? "[]")';
+            var rooms = [];
+            try {
+                // Nếu controller đã serialize là JSON string, parse nó
+                rooms = JSON.parse(roomsJsonString);
+                if (!Array.isArray(rooms)) rooms = [];
+            } catch (e) {
+                // fallback an toàn
+                try {
+                    // thử raw Razor output (trường hợp ViewBag.RoomsJson đã được in là object literal)
+                    rooms = @Html.Raw(ViewBag.RoomsJson ?? "[]");
+                    if (!Array.isArray(rooms)) rooms = [];
+                } catch (err) {
+                    rooms = [];
+                }
+            }
+
+            function updateRoomsCount(list) {
+                var cnt = list.length || 0;
+                $("#roomsCount strong").text(cnt);
+                if (cnt === 0) {
+                    $("#noRoomsMessage").show();
+                    $("#roomsTable").hide();
+                } else {
+                    $("#noRoomsMessage").hide();
+                    $("#roomsTable").show();
+                }
+            }
+
+            function renderRoomOptions(list) {
+                var $sel = $("#PhongSelect");
+                $sel.empty();
+                $sel.append($("<option/>").val("").text("-- Chọn phòng (nếu muốn) --"));
+                list.forEach(function (r) {
+                    var displayText = (r.MaPhong || "") + " - " + (r.TenPhong || "");
+                    if (r.Toa) displayText += " (" + r.Toa + ")";
+                    // Hiện số người và sức chứa nếu có
+                    if (r.SoNguoi !== undefined && r.SucChua !== undefined && r.SucChua !== null) {
+                        displayText += " - " + r.SoNguoi + "/" + r.SucChua + " người";
+                    } else if (r.SoNguoi !== undefined) {
+                        displayText += " - " + r.SoNguoi + " người";
+                    }
+                    $sel.append($("<option/>").val(r.MaPhong).text(displayText));
+                });
+            }
+
+            function renderTable(list) {
+                var $tb = $("#roomsTbody");
+                $tb.empty();
+                list.forEach(function (r) {
+                    var remaining = "";
+                    var suc = (r.SucChua !== undefined && r.SucChua !== null) ? r.SucChua : null;
+                    var cur = (r.SoNguoi !== undefined && r.SoNguoi !== null) ? r.SoNguoi : 0;
+                    if (suc !== null) {
+                        remaining = suc - cur;
+                        if (remaining < 0) remaining = 0;
+                    } else {
+                        // nếu không có SucChua, giả sử 4
+                        remaining = 4 - cur;
+                        if (remaining < 0) remaining = 0;
+                    }
+
+                    var $tr = $("<tr>")
+                        .attr("data-id", r.MaPhong)
+                        .attr("data-code", r.MaPhong || "")
+                        .attr("data-name", r.TenPhong || "")
+                        .attr("data-toa", r.Toa || "")
+                        .attr("data-loaiphong", r.LoaiPhong || "")
+                        .css("cursor", "pointer");
+
+                    $tr.append("<td>" + (r.MaPhong || "") + "</td>");
+                    $tr.append("<td>" + (r.TenPhong || "") + "</td>");
+                    $tr.append("<td>" + (r.LoaiPhong || "") + "</td>");
+                    $tr.append("<td>" + (r.Toa || "") + "</td>");
+                    $tr.append("<td>" + ((r.SoNguoi !== undefined && r.SoNguoi !== null) ? r.SoNguoi : "0") + (r.SucChua ? ("/" + r.SucChua) : "") + "</td>");
+                    // Cột "Còn"
+                    var badge = "<span class='badge badge-info' title='Số chỗ còn trống'>" + remaining + "</span>";
+                    $tr.append("<td>" + badge + "</td>");
+                    $tb.append($tr);
+                });
+
+                updateRoomsCount(list);
+            }
+
+            function filterRooms() {
+                var lp = $("#LoaiPhongSelect").val();
+                var toa = $("#ToaSelect").val();
+                var q = ($("#filterSearch").val() || "").toLowerCase();
+
+                var filtered = rooms.filter(function (r) {
+                    var ok = true;
+                    if (lp && lp !== "") {
+                        ok = ok && (r.LoaiPhong === lp);
+                    }
+                    if (toa && toa !== "") {
+                        ok = ok && (r.Toa === toa);
+                    }
+                    if (q) {
+                        var code = (r.MaPhong || "").toLowerCase();
+                        var name = (r.TenPhong || "").toLowerCase();
+                        ok = ok && (code.indexOf(q) >= 0 || name.indexOf(q) >= 0);
+                    }
+                    return ok;
+                });
+
+                renderRoomOptions(filtered);
+                renderTable(filtered);
+            }
+
+            $(function () {
+                // initial render
+                renderRoomOptions(rooms);
+                renderTable(rooms);
+
+                // events
+                $("#LoaiPhongSelect, #ToaSelect").on("change", filterRooms);
+                $("#filterSearch").on("input", filterRooms);
+
+                // Click chọn phòng từ bảng
+                $("#roomsTbody").on("click", "tr", function () {
+                    var code = $(this).data("id");
+                    $("#PhongSelect").val(code);
+                    $("#roomsTbody tr").removeClass("table-active");
+                    $(this).addClass("table-active");
+                    $('html, body').animate({ scrollTop: $('form').offset().top - 80 }, 300);
+                });
+
+                // Nếu không có phòng ban đầu, hiện message
+                updateRoomsCount(rooms || []);
+            });
+        </script>
+
+    </div>
+</div>

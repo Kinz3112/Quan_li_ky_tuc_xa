@@ -1,0 +1,151 @@
+﻿@{
+    ViewData["Title"] = "Hệ thống sinh viên nội trú";
+    Layout = "~/Views/Shared/Components/Students/StudentViewLayout.cshtml";
+
+    var userName = User?.Identity?.Name ?? (ViewBag.UserName ?? "Khách");
+    var isAuth = User?.Identity?.IsAuthenticated ?? false;
+}
+
+<div class="templatemo-content">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="/css/templatemo_main.css" />
+
+    <div class="template-page-wrapper fullwidth">
+        <div class="tm-topbox-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <aside class="col-md-3 templatemo-sidebar" role="navigation">
+                        @await Html.PartialAsync("_LeftMenu")
+                    </aside>
+
+                    <main class="col-md-9 templatemo-content-wrapper" role="main">
+
+                        <!-- HERO -->
+                        <div class="jumbotron" style="padding:30px;">
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <h1>Hệ thống thông tin sinh viên nội trú</h1>
+                                    <p class="lead">Quản lý chỗ ở, đăng ký, thanh toán và hỗ trợ sinh viên nội trú — nhanh chóng, minh bạch và thân thiện.</p>
+
+                                    <p class="small" style="margin-top:12px;">Truy cập nhanh: <a href="/Students/MyRoom">Xem loại phòng</a> • <a href="/Students/DangKyPhong">Đăng ký chỗ</a> • <a href="/Students/LichSuThanhToan">Thanh toán</a></p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- FEATURES -->
+                        <div class="row margin-bottom-30">
+                            <div class="col-md-3">
+                                <div class="panel panel-default">
+                                    <div class="panel-body text-center">
+                                        <h4>Quản lý hồ sơ</h4>
+                                        <p>Tự động lưu thông tin sinh viên, tình trạng đăng ký và lịch sử thanh toán.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="panel panel-default">
+                                    <div class="panel-body text-center">
+                                        <h4>Đăng ký chỗ</h4>
+                                        <p>Nộp hồ sơ trực tuyến, chọn tòa và loại phòng, theo dõi trạng thái xét duyệt.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="panel panel-default">
+                                    <div class="panel-body text-center">
+                                        <h4>Thanh toán</h4>
+                                        <p>Thanh toán trực tuyến hoặc tại phòng quản lý; thông báo khi có hóa đơn mới.</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="panel panel-default">
+                                    <div class="panel-body text-center">
+                                        <h4>Hỗ trợ & Thông báo</h4>
+                                        <p>Hệ thống thông báo, yêu cầu bảo trì và kênh liên hệ trực tiếp với nhân viên KTX.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- QUICK STATS -->
+                        <h3>Thống kê nhanh</h3>
+                        <div class="row margin-bottom-30">
+                            <div class="col-sm-4">
+                                <div class="well text-center">
+                                    <h2>@(ViewBag.TotalBeds ?? "50+")</h2>
+                                    <p>Tổng số giường</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="well text-center">
+                                    <h2>@(ViewBag.Buildings ?? "4")</h2>
+                                    <p>Số tòa nhà</p>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="well text-center">
+                                    <h2>@(ViewBag.Occupancy ?? "~70%")</h2>
+                                    <p>Tỷ lệ lấp đầy</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- CALL TO ACTION / QUICK LINKS -->
+                        <h3>Truy cập nhanh</h3>
+                        <div class="row margin-bottom-30">
+                            <div class="col-sm-3">
+                                <a class="panel panel-info text-center" href="/Students/MyRoom">
+                                    <div class="panel-body">
+                                        <h4>Xem phòng</h4>
+                                        <p>Tham khảo loại phòng & giá</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="panel panel-success text-center" href="/Students/DangKyPhong">
+                                    <div class="panel-body">
+                                        <h4>Đăng ký</h4>
+                                        <p>Nộp hồ sơ trực tuyến</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="panel panel-warning text-center" href="/Students/LichSuThanhToan">
+                                    <div class="panel-body">
+                                        <h4>Thanh toán</h4>
+                                        <p>Hóa đơn & Lịch sử</p>
+                                    </div>
+                                </a>
+                            </div>
+                            <div class="col-sm-3">
+                                <a class="panel panel-default text-center" href="/LienHe">
+                                    <div class="panel-body">
+                                        <h4>Hỗ trợ</h4>
+                                        <p>Mở ticket & Liên hệ</p>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- NEWS & UPCOMING EVENTS -->
+                        <h3>Thông báo mới</h3>
+                        <ul>
+                            <li><strong>01/11:</strong> Mở đăng ký chỗ học kỳ tới — nộp hồ sơ tại Phòng Quản lý KTX hoặc qua cổng sinh viên.</li>
+                            <li><strong>15/12:</strong> Ngày hội sinh viên nội trú — văn nghệ & thể thao.</li>
+                        </ul>
+                    </main>
+                </div>
+            </div>
+        </div>
+
+        <script src="/js/jquery.min.js"></script>
+        <script src="/js/bootstrap.min.js"></script>
+        <script src="/js/templatemo_script.js"></script>
+    </div>
+</div>

@@ -102,7 +102,6 @@ namespace Quan_li_ky_tuc_xa.Controllers
             return View(phong);
         }
 
-        // POST: Phong/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit_Phong(string id, [Bind("MaPhong,Ten,MaToa,LoaiPhong,SoNguoi,MaTruongPhong")] Phong phong)
@@ -142,6 +141,171 @@ namespace Quan_li_ky_tuc_xa.Controllers
         {
             return (db.Phongs?.Any(e => e.MaPhong == id)).GetValueOrDefault();
         }
+
+        //Student manager
+        public IActionResult SinhVien(string search, int page = 1)
+        {
+            int pageSize = 10;
+            var query = db.Sinh_Viens.AsQueryable();
+
+            // 🔹 Nếu có từ khóa tìm kiếm
+            if (!string.IsNullOrEmpty(search))
+            {
+                query = query.Where(sv => sv.HovaTen.Contains(search) || sv.Lop.Contains(search));
+            }
+
+            var totalRecords = query.Count();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            var sinhviens = query
+                .Include(s => s.Phong)
+                .OrderBy(sv => sv.MaSinhVien)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.Search = search;
+            ViewBag.Page = page;
+            ViewBag.TotalPages = totalPages;
+
+            return View(sinhviens);
+        }
+
+        public IActionResult AddSinhVien()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddSinhVien(
+    [Bind("MaSinhVien,HovaTen,Lop,Khoa,Sdt,GioiTinh,NgaySinh,MaPhong,Username")]
+    Sinh_Vien sv)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(sv);
+            }
+
+            // 1️⃣ Kiểm tra Username đã tồn tại chưa
+            var existingUser = await db.Users.FirstOrDefaultAsync(u => u.Username == sv.Username);
+            if (existingUser != null)
+            {
+                TempData["ErrorMessage"] = "Tên đăng nhập đã tồn tại!";
+                return View(sv);
+            }
+
+            // 2️⃣ Tạo User mới cho sinh viên
+            var newUser = new User
+            {
+                Username = sv.Username,
+                Password = "123456", // ⚠️ Nên hash thực tế
+                Email = sv.MaSinhVien + "@student.ktu.edu.vn",
+                isActive = true,
+                Created_At = DateTime.Now,
+                Last_At = DateTime.Now
+            };
+            db.Users.Add(newUser);
+            await db.SaveChangesAsync();
+
+            // 3️⃣ Thêm Role gắn với User
+            var role = new Role
+            {
+                Username = newUser.Username,
+                RoleName = "SinhVien"
+            };
+            db.Roles.Add(role);
+
+            // 4️⃣ Thêm SinhVien, gắn Username
+            sv.Username = newUser.Username;
+            db.Sinh_Viens.Add(sv);
+
+            await db.SaveChangesAsync();
+
+            TempData["SuccessMessage"] = "Thêm sinh viên, tài khoản và vai trò thành công!";
+            return RedirectToAction(nameof(SinhVien));
+        }
+
+
+
+        public IActionResult EditSinhVien(string id)
+        {
+            var sv = db.Sinh_Viens.Find(id);
+            if (sv == null)
+                return NotFound();
+            return View(sv);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditSinhVien(Sinh_Vien sv)
+        {
+            if (ModelState.IsValid)
+            {
+                db.Sinh_Viens.Update(sv);
+                db.SaveChanges();
+                return RedirectToAction(nameof(SinhVien));
+            }
+            return View(sv);
+        }
+
+
+        public IActionResult DeleteSinhVien(string id)
+        {
+            // 1️⃣ Lấy sinh viên và các quan hệ liên quan
+            var sv = db.Sinh_Viens
+                .Include(s => s.Phong)
+                .Include(s => s.User)
+                .FirstOrDefault(s => s.MaSinhVien == id);
+
+            if (sv == null)
+                return NotFound();
+
+            try
+            {
+                // 2️⃣ Xóa các hợp đồng của sinh viên
+                var hopDongs = db.Hop_Dongs
+                    .Where(h => h.MaSinhVien == sv.MaSinhVien)
+                    .ToList();
+
+                foreach (var hd in hopDongs)
+                {
+                    // 3️⃣ Xóa các hóa đơn của từng hợp đồng
+                    var hoaDons = db.Hoa_Dons
+                        .Where(h => h.MaHopDong == hd.MaHopDong)
+                        .ToList();
+
+                    foreach (var hoaDon in hoaDons)
+                    {
+                        db.Hoa_Dons.Remove(hoaDon);
+                    }
+
+                    // Xóa hợp đồng
+                    db.Hop_Dongs.Remove(hd);
+                }
+
+                // 4️⃣ Xóa Role và User tương ứng (nếu có)
+                if (sv.User != null)
+                {
+                    var roles = db.Roles.Where(r => r.Username == sv.User.Username).ToList();
+                    db.Roles.RemoveRange(roles);
+                    db.Users.Remove(sv.User);
+                }
+
+                // 5️⃣ Xóa sinh viên
+                db.Sinh_Viens.Remove(sv);
+                db.SaveChanges();
+
+                TempData["SuccessMessage"] = "Đã xóa sinh viên và toàn bộ dữ liệu liên quan!";
+            }
+            catch (Exception ex)
+            {
+                TempData["ErrorMessage"] = "Lỗi khi xóa sinh viên: " + ex.Message;
+            }
+
+            return RedirectToAction(nameof(SinhVien));
+        }
+
+
 
 
         //Contract Manager

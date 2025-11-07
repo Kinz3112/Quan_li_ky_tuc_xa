@@ -1,15 +1,59 @@
-﻿<div id="main-wrapper">
+﻿@{
+    var userName = User?.Identity?.Name ?? (ViewBag.UserName ?? "Khách");
+    var isAuth = User?.Identity?.IsAuthenticated ?? false;
+}
+<div id="main-wrapper">
     <div class="header-brand">
         <div class="brand-left">
             <img src="/images/logo1.png" alt="Logo" class="brand-logo">
             <div class="brand-names">
-                <div class="school-vi">Trường ĐH Giao thông vận tải</div>
+                <div class="school-vi">Trường đại học giao thông vận tải</div>
                 <div class="school-en">UNIVERSITY OF TRANSPORT AND COMMUNICATIONS</div>
             </div>
         </div>
 
         <div class="brand-title">
-            Ban quản lý ký túc xá sinh viên
+            Hệ thống thông tin sinh viên nội trú
+        </div>
+    </div>
+</div>
+<div class="tm-topbox-wrapper">
+    <div class="tm-topbox container-fluid" role="region" aria-label="Top search and user area">
+        <div class="tm-topbox-left">
+            <!-- Hamburger: luôn hiển thị, click để toggle sidebar trên desktop/mobile -->
+            <button type="button" class="navbar-toggle tm-hamburger" aria-label="Toggle sidebar" title="Ẩn/Hiện menu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            <!-- Search form -->
+            <form class="form-inline tm-search-form" method="get" action="/Search/Results" role="search" aria-label="Tìm kiếm">
+                <label class="sr-only" for="q">Tìm kiếm</label>
+                <input id="q" name="q" type="text" class="form-control tm-search-input" placeholder="Tìm kiếm..." />
+                <button type="submit" class="btn btn-primary tm-search-btn">Tìm</button>
+            </form>
+        </div>
+
+        <!-- RIGHT: welcome + login/logout (always right-aligned) -->
+        <div class="tm-topbox-right" role="region" aria-label="User area">
+            <div class="tm-user-inline">
+                <span class="tm-welcome">Welcome,</span>
+                <strong class="tm-username">@userName</strong>
+
+                @if (isAuth)
+                {
+                    <form asp-controller="Acc" asp-action="Logout" method="post" class="d-inline">
+                        <button type="submit" class="btn btn-link text-danger">Đăng xuất</button>
+                        @Html.AntiForgeryToken()
+                    </form>
+                }
+                else
+                {
+                    <a class="btn btn-link tm-login-btn" href="/Acc/Login">Đăng nhập</a>
+                }
+            </div>
         </div>
     </div>
 </div>

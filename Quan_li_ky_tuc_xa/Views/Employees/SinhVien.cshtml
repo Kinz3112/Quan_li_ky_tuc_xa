@@ -1,0 +1,65 @@
+﻿@model IEnumerable<Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien>
+
+@{
+    ViewBag.Title = "Quản lý sinh viên";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+
+<div class="templatemo-content">
+
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <form method="get" class="d-flex">
+                    <input type="text" name="search" class="form-control me-2"
+                           placeholder="Tìm theo tên hoặc lớp" value="@ViewBag.Search" />
+                    <button type="submit" class="btn btn-outline-primary">Tìm kiếm</button>
+                </form>
+                <a href="/Employees/AddSinhVien" class="btn btn-primary">+ Thêm sinh viên</a>
+            </div>
+
+            <table class="table table-bordered table-hover shadow-sm">
+                <thead class="table-light">
+                    <tr>
+                        <th>Mã SV</th>
+                        <th>Họ tên</th>
+                        <th>Ngày sinh</th>
+                        <th>Gioi tinh</th>
+                        <th>Lớp</th>
+                        <th>SĐT</th>
+                        <th>Phòng</th>
+                        <th>Thao tác</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var sv in Model)
+                    {
+                        <tr>
+                            <td>@sv.MaSinhVien</td>
+                            <td>@sv.HovaTen</td>
+                            <td>@sv.NgaySinh.ToString("dd/MM/yyyy")</td>
+                         <td>@(sv.GioiTinh ? "Nam" : "Nữ")</td>
+                            <td>@sv.Lop</td>
+                            <td>@sv.Sdt</td>
+                    <td>@(sv.Phong?.Ten ?? "Chưa có phòng")</td>
+                            <td>
+                                <a href="/Employees/EditSinhVien/@sv.MaSinhVien" class="btn btn-warning btn-sm">Sửa</a>
+                                <a href="/Employees/DeleteSinhVien/@sv.MaSinhVien" class="btn btn-danger btn-sm"
+                                   onclick="return confirm('Bạn có chắc muốn xóa sinh viên này không?');">Xóa</a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Phân trang -->
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center mt-3">
+                    @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                    {
+                        <li class="page-item @(i == ViewBag.Page ? "active" : "")">
+                            <a class="page-link" href="?page=@i&search=@ViewBag.Search">@i</a>
+                        </li>
+                    }
+                </ul>
+            </nav>
+        </div>
+

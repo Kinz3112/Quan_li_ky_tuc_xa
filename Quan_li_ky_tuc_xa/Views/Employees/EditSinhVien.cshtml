@@ -1,0 +1,48 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien
+
+@{
+    ViewBag.Title = "Sửa sinh viên";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+
+<div class="templatemo-content">
+            <h2 class="mb-4">Chỉnh sửa thông tin sinh viên</h2>
+
+            <form asp-action="EditSinhVien" method="post">
+                <input type="hidden" asp-for="MaSinhVien" />
+
+                <div class="mb-3">
+                    <label asp-for="HovaTen" class="form-label"></label>
+                    <input asp-for="HovaTen" class="form-control" />
+                    <span asp-validation-for="HovaTen" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="NgaySinh" class="form-label"></label>
+                    <input asp-for="NgaySinh" type="date" class="form-control" />
+                    <span asp-validation-for="NgaySinh" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Lop" class="form-label"></label>
+                    <input asp-for="Lop" class="form-control" />
+                    <span asp-validation-for="Lop" class="text-danger"></span>
+                </div>
+                <div class="mb-3">
+                    <label>Giới tính</label>
+                    <select asp-for="GioiTinh" class="form-select">
+                        <option value="true">Nam</option>
+                        <option value="false">Nữ</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label asp-for="Sdt" class="form-label"></label>
+                    <input asp-for="Sdt" class="form-control" />
+                    <span asp-validation-for="Sdt" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+                <a asp-action="SinhVien" class="btn btn-secondary">Quay lại</a>
+            </form>
+
+</div>

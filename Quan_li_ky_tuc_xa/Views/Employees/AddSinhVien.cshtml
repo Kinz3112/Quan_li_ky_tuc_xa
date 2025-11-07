@@ -1,0 +1,62 @@
+﻿@model Quan_li_ky_tuc_xa.Models.Entities.Sinh_Vien
+@{
+    ViewData["Title"] = "Thêm sinh viên mới";
+    Layout = "~/Views/Shared/Components/Employees/EmployeesLayout.cshtml";
+}
+<div class="templatemo-content">
+<h2>Thêm sinh viên</h2>
+
+<form asp-action="AddSinhVien" method="post">
+    <div class="mb-3">
+        <label asp-for="MaSinhVien" class="form-label"></label>
+        <input asp-for="MaSinhVien" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="HovaTen" class="form-label"></label>
+        <input asp-for="HovaTen" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Lop" class="form-label"></label>
+        <input asp-for="Lop" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Khoa" class="form-label"></label>
+        <input asp-for="Khoa" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="Sdt" class="form-label"></label>
+        <input asp-for="Sdt" class="form-control" />
+    </div>
+
+    <div class="mb-3">
+        <label>Giới tính</label>
+        <select asp-for="GioiTinh" class="form-select">
+            <option value="true">Nam</option>
+            <option value="false">Nữ</option>
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label asp-for="NgaySinh" class="form-label"></label>
+        <input asp-for="NgaySinh" class="form-control" type="date" />
+    </div>
+
+        <div class="form-group">
+            <label for="Username">Tên đăng nhập</label>
+            <input asp-for="Username" class="form-control" required />
+            <span asp-validation-for="Username" class="text-danger"></span>
+        </div>
+
+
+    <button type="submit" class="btn btn-success">Thêm sinh viên</button>
+    <a asp-action="SinhVien" class="btn btn-secondary">Hủy</a>
+</form>
+</div>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div class="alert alert-success mt-3">@TempData["SuccessMessage"]</div>
+}

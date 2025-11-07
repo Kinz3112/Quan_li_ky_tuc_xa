@@ -1,0 +1,157 @@
+﻿@model IEnumerable<Quan_li_ky_tuc_xa.Models.ViewModels.RoomViewModel>
+
+@{
+    ViewData["Title"] = "Phòng ở hiện tại";
+    Layout = "~/Views/Shared/Components/Students/StudentViewLayout.cshtml";
+    var userName = User?.Identity?.Name ?? "Khách";
+    var rooms = Model ?? Enumerable.Empty<Quan_li_ky_tuc_xa.Models.ViewModels.RoomViewModel>();
+}
+
+<div class="templatemo-content">
+    <link rel="stylesheet" href="/css/templatemo_main.css" />
+
+    <div class="template-page-wrapper fullwidth">
+        <div class="tm-topbox-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+
+                    <main class="col-md-9 templatemo-content-wrapper" role="main">
+                        <ol class="breadcrumb">
+                            <li><a href="/StudentView">Trang chủ</a></li>
+                            <li class="active">Phòng ở hiện tại</li>
+                        </ol>
+
+                        <h2>Phòng ở hiện tại của <strong>@userName</strong></h2>
+                        <p class="text-muted">
+                            Dưới đây là thông tin chi tiết về phòng bạn đang ở trong ký túc xá.
+                        </p>
+
+                        @if (!rooms.Any())
+                        {
+                            <div class="alert alert-info">
+                                Bạn hiện chưa được phân vào phòng nào.
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="panel panel-default">
+                                <div class="panel-heading"><strong>Thông tin phòng</strong></div>
+                                <div class="panel-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover">
+                                            <thead class="bg-primary text-white">
+                                                <tr>
+                                                    <th>Mã phòng</th>
+                                                    <th>Tên phòng</th>
+                                                    <th>Loại phòng</th>
+                                                    <th>Tòa</th>
+                                                    <th>Số người / Sức chứa</th>
+                                                    <th>Ngày nhận</th>
+                                                    <th>Trạng thái</th>
+                                                    <th>Hành động</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach (var r in rooms)
+                                                {
+                                                    bool isFull = r.SoNguoi >= r.SucChua;
+                                                    string status = r.TrangThai ?? "Chưa xác định";
+                                                    string badgeClass = status == "Đang ở" ? "label-success" : "label-default";
+
+                                                    <tr>
+                                                        <td>@(r.MaPhong ?? "-")</td>
+                                                        <td>@(r.Ten ?? "-")</td>
+                                                        <td>@(r.LoaiPhong ?? "-")</td>
+                                                        <td>@(r.ToaName ?? "-")</td>
+                                                        <td class="text-center">
+                                                            <strong>@r.SoNguoi / @r.SucChua</strong>
+                                                            @if (isFull)
+                                                            {
+                                                                <span class="label label-danger" style="margin-left:6px">Đầy</span>
+                                                            }
+                                                            else
+                                                            {
+                                                                <span class="label label-success" style="margin-left:6px">Còn trống</span>
+                                                            }
+                                                        </td>
+                                                        <td>@(r.NgayNhan?.ToString("dd/MM/yyyy") ?? "-")</td>
+                                                        <td><span class="label @badgeClass">@status</span></td>
+                                                        <td>
+                                                            @{
+                                                                // Tìm hợp đồng của sinh viên hiện tại
+                                                                var myHop = r.HopInfos?.FirstOrDefault(h =>
+                                                                string.Equals(h.MaSinhVien, userName, StringComparison.OrdinalIgnoreCase)
+                                                                );
+                                                            }
+
+                                                            <div class="btn-group" role="group">
+                                                                <form asp-controller="Rooms" asp-action="ExtendContract" method="post" class="d-inline">
+                                                                    @Html.AntiForgeryToken()
+                                                                    <input type="hidden" name="MaHopDong" value="@(myHop?.MaHopDong ?? "")" />
+                                                                    <button type="submit" class="btn btn-sm btn-success" @(isFull ? "disabled" : "")>
+                                                                        <i class="glyphicon glyphicon-repeat"></i> Gia hạn
+                                                                    </button>
+                                                                </form>
+
+                                                                <form asp-controller="Rooms" asp-action="CancelExtension" method="post" class="d-inline" style="margin-left:6px;">
+                                                                    @Html.AntiForgeryToken()
+                                                                    <input type="hidden" name="MaHopDong" value="@(myHop?.MaHopDong ?? "")" />
+                                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                                        <i class="glyphicon glyphicon-remove"></i> Hủy
+                                                                    </button>
+                                                                </form>
+
+                                                                <button type="button"
+                                                                        class="btn btn-sm btn-info btn-show-peers"
+                                                                        data-phong="@r.MaPhong"
+                                                                        data-tenphong="@r.Ten"
+                                                                        style="margin-left:6px;">
+                                                                    <i class="glyphicon glyphicon-user"></i> Xem cùng phòng
+                                                                </button>
+                                                            </div>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Khu vực hiển thị danh sách bạn cùng phòng -->
+                                    <div id="peersArea" style="margin-top:12px;"></div>
+                                </div>
+                            </div>
+                        }
+                    </main>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="/js/jquery.min.js"></script>
+    <script>
+        $(function () {
+            $(".btn-show-peers").on("click", function () {
+                const phong = $(this).data("phong");
+                const tenPhong = $(this).data("tenphong");
+
+                $("#peersArea").html(
+                    `<div class='alert alert-info'>
+                        Đang tải danh sách sinh viên cùng phòng <strong>${tenPhong} (${phong})</strong>...
+                    </div>`
+                );
+
+                // Gợi ý AJAX: bạn có thể tạo action /Rooms/GetPeers?maPhong=P01
+                $.get(`/Rooms/GetPeers?maPhong=${phong}`, function (html) {
+                    $("#peersArea").html(html);
+                    $('html, body').animate({ scrollTop: $("#peersArea").offset().top - 80 }, 400);
+                }).fail(function () {
+                    $("#peersArea").html(
+                        `<div class='alert alert-danger'>Không thể tải danh sách sinh viên cho phòng ${phong}.</div>`
+                    );
+                });
+            });
+        });
+    </script>
+}
